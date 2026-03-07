@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+
+    <!-- Allow sharing files from: -->
+    <!-- getExternalFilesDir(null) (external-files-path) -->
+    <external-files-path
+        name="external_files"
+        path="." />
+
+    <!-- Optional: allow sharing internal app files if you ever use them -->
+    <files-path
+        name="internal_files"
+        path="." />
+
+    <!-- Optional: allow sharing cache if needed -->
+    <cache-path
+        name="cache"
+        path="." />
+
+    <!-- Optional: allow sharing data if needed -->
+    <data-path
+        name="data"
+        path="." />
+</paths>
+

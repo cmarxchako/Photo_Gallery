@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:contextClickable="true"
+    android:orientation="vertical"
+    android:textAlignment="center">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/locked"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/md_theme_light_onPrimary"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vaultRecycler"
+        android:layout_width="350dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="25dp"
+        android:layout_weight="1"
+        android:contextClickable="true" />
+
+    <ProgressBar
+        android:id="@+id/vaultProgress"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginBottom="80dp"
+        android:paddingVertical="140dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/restoreVaultButton"
+            android:layout_width="105dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="0.5dp"
+            android:background="@color/md_theme_light_onSurface"
+            android:text="@string/restore"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/md_theme_light_onPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/refreshVaultButton"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="24.5dp"
+            android:background="@color/md_theme_light_onSurface"
+            android:text="@string/reload"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/md_theme_light_onPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/deleteVaultButton"
+            android:layout_width="105dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="25dp"
+            android:background="@color/md_theme_light_onSurface"
+            android:text="@string/del"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/md_theme_light_onPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="ButtonStyle" />
+    </LinearLayout>
+</LinearLayout>
+

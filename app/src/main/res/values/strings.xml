@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- General App Tests -->
+    <string name="app_name">Call Recorder</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="idle">Idle</string>
+    <string name="recordingFormat">Recording Format</string>
+    <string name="recordingStarted">Recording Started</string>
+    <string name="recordingStopped">Recording Stopped</string>
+    <string name="audioSource">Audio Source</string>
+    <string name="notifyMode">Notification Mode</string>
+    <string name="startPlayback">Playback</string>
+    <string name="externalPlayer">Use External Player</string>
+    <string name="enableRoot">Enable Root Features</string>
+    <string name="enableOverlay">Enable Overlay</string>
+    <string name="autoRecording">Automatic Recording</string>
+    <string name="noRecording">Manual Recording</string>
+
+    <!-- App strings -->
+    <string name="appGreet">AnDroid All-In-One</string>
+    <string name="appName">Photo Gallery</string>
+    <string name="appNameGD">Google SignInHubActivity</string>
+    <string name="appNameOD">AzureLogIn BrowserTabActivity</string>
+
+    <!-- Button strings -->
+    <string name="backup">Backup</string>
+    <string name="backupMedia">Backup All Media</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
+    <string name="del">Delete</string>
+    <string name="invert">Invert</string>
+    <string name="lock">Vault</string>
+    <string name="locked">Gallery Vault</string>
+    <string name="move">Move</string>
+    <string name="reload">Refresh</string>
+    <string name="restore">Restore</string>
+    <string name="select">Select All</string>
+    <string name="store">Save</string>
+    <string name="viewMode">View Mode</string>
+
+    <!-- Cloud Storage string -->
+    <string name="GDriveClientId">client-id</string>
+    <string name="GDriveSignin">Sign in to Google Drive</string>
+    <string name="ODriveSignin">Sign in to MS OneDrive</string>
+    <string name="ODClientId">msal46fe6c5f–0518–4436-a85a-8993094287a6</string>
+    <string name="GDscope">https://www.googleapis.com/auth/drive.file</string>
+    <string name="ODscope">Files.ReadWrite.All</string>
+    <string name="token_Xchange">url</string>
+    <!-- <string name="server_token_exchange_url">url</string> -->
+
+    <!-- Homescreen Tab strings -->
+    <string name="tabPhotos">Photos</string>
+    <string name="tabVideos">Videos</string>
+    <string name="tabMedias">Medias</string>
+    <string name="tabSettings">Settings</string>
+    <string name="tabAboutApp">About App</string>
+
+    <!-- Menu strings -->
+    <string name="folder_select">Select folders to include</string>
+
+    <!-- Theme Setting strings -->
+    <string name="pref_theme_title">Theme</string>
+    <string name="pref_theme_system">System default</string>
+    <string name="pref_theme_light">Light Theme</string>
+    <string name="pref_theme_dark">Dark Theme</string>
+    <string name="pref_theme_pure_black">Pure Black (AMOLED)</string>
+    <string name="pref_theme_description">Choose App theme</string>
+
+    <!-- Placeholder strings -->
+    <!--
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    -->
+</resources>
+

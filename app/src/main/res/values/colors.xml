@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Light theme colors are defined here -->
+    <color name="md_theme_light_primary">#6750A4</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_secondary">#625B71</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_onSurface">#1C1B1F</color>
+
+    <!-- Dark theme colors are defined in values-night/colors.xml -->
+    <color name="md_theme_dark_primary">#D0BCFF</color>
+    <color name="md_theme_dark_onPrimary">#381E72</color>
+    <color name="md_theme_dark_secondary">#CCC2DC</color>
+    <color name="md_theme_dark_surface">#121212</color>
+    <color name="md_theme_dark_onSurface">#E6E1E5</color>
+
+    <!-- Pure black theme colors -->
+    <color name="md_theme_pure_black_primary">#000000</color>
+    <color name="md_theme_pure_black_onPrimary">#FFFFFF</color>
+    <color name="md_theme_pure_black_secondary">#000000</color>
+    <color name="md_theme_pure_black_surface">#000000</color>
+    <color name="md_theme_pure_black_onSurface">#FFFFFF</color>
+</resources>
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Dark theme styles -->
+    <style name="Theme.PhotoGallery.Dark" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/md_theme_dark_primary</item>
+        <item name="android:navigationBarColor">@color/md_theme_dark_surface</item>
+    </style>
+</resources>
+

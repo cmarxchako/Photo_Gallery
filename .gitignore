@@ -1,34 +1,73 @@
-# Gradle files
-.gradle/
+app/.cxx
+app/src/debug/
+app/src/test/
+app/src/androidTest/
 build/
-
-# Local configuration file (sdk path, etc)
-local.properties
-
-# Log/OS Files
-*.log
-
-# Android Studio generated files and folders
 captures/
 .externalNativeBuild/
-.cxx/
+.gradle/
+.idea/
+.tmp/
+.temp/
 *.aab
 *.apk
-output-metadata.json
-
-# IntelliJ
+!.idea/compiler.xml
+!.idea/gradle.xml
+#!.idea/misc.xml
+!.idea/workspace.xml
+.DS_Store
 *.iml
-.idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
+local.properties
+!README.md
 
-# Keystore files
+################################################
+# Android.gitignore
+build/
+captures/
+.cxx/
+.externalNativeBuild/
+.gradle/
+.idea/
+*.aab
+*.apk
+deploymentTargetDropDown.xml
+google-services.json
+*.hprof
+*.iml
 *.jks
 *.keystore
+local.properties
+*.log
+misc.xml
+output-metadata.json
+render.experimental.xml
 
-# Google Services (e.g. APIs or Firebase)
-google-services.json
+################################################
+# Gradle.gitignore
+#**/build/
+#.gradle
+#!**/src/**/build/
+#.classpath
+#gradle-app.setting
+#!gradle-wrapper.jar
+#!gradle-wrapper.properties
+#.gradletasknamecache
+#.project
 
-# Android Profiling
-*.hprof
+################################################
+# Kotlin.gitignore
+#.kotlin/
+#.mtj.tmp/
+#*.class
+#*.ctxt
+#*.ear
+#hs_err_pid*
+#*.jar
+#*.log
+#*.nar
+#replay_pid*
+#*.rar
+#*.tar.gz
+#*.war
+#*.zip
+

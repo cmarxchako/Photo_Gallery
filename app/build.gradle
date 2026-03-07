@@ -1,0 +1,147 @@
+plugins {
+    //id 'kotlin-kapt'
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.droidaio.gallery'
+    compileSdkVersion 34
+
+    defaultConfig {
+        applicationId "com.droidaio.gallery"
+        minSdkVersion 23
+        //noinspection OldTargetApi
+        targetSdkVersion 33
+        versionCode 10180226
+        versionName "0.1.0.18.022026"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables { useSupportLibrary true }
+    }
+
+
+    signingConfigs {
+        debug {/*
+            storeFile file(System.getenv("HOME") + "/.android/debug.keystore")
+            storePassword System.getenv("android")
+            keyAlias System.getenv("androiddebugkey")
+            keyPassword System.getenv("android")}*/
+        }
+        release {/*
+            storeFile file(System.getenv("HOME") + "/.android/keys/photo-gallery.jks")
+            storePassword System.getenv("photo-gallery")
+            keyAlias System.getenv("PhotoGallery")
+            keyPassword System.getenv("photo-gallery")}*/
+        }
+    }
+
+    buildTypes {
+        debug {
+            //signingConfig signingConfigs.debug
+            minifyEnabled false
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+        release {
+            //signingConfig signingConfigs.release
+            minifyEnabled false
+            applicationIdSuffix '.release'
+            versionNameSuffix '-release'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+        viewBinding true
+        //dataBinding true   // add this only if you actually use <layout> tags with data variables
+    }
+    composeOptions {
+        //1.4.7 compatible with Compose tooling; adjust if needed
+        kotlinCompilerExtensionVersion "$compose_version"
+    }
+    packagingOptions {
+        resources {excludes += '/META-INF/{AL2.0,LGPL2.1}'}
+    }
+    //ndkVersion ndk_Version
+    //buildToolsVersion buildTools_Version
+}
+
+dependencies {
+
+    /* Existing dependencies (kept for reference,
+     * but updated versions and some additions below)
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.compose.material3:material3:1.0.0-alpha11'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    */
+    // Updated dependencies for Compose and related libraries
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.activity:activity-compose:1.8.0'
+    // Compose BOM (keeps versions consistent)
+    implementation platform("androidx.compose:compose-bom:$compose_bom")
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material3:material3-window-size-class'
+    implementation 'androidx.navigation:navigation-compose:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
+    // Coil Compose for image loading (C). JSON serialization for persisting pending ops
+    // Accompanist for system UI control (optional)
+    implementation 'io.coil-kt:coil-compose:2.0.0' //2.4.0
+    implementation 'com.google.code.gson:gson:2.9.1' //2.10.1
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.23.0' //0.31.5-beta
+    // Existing libraries (kept)
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation 'androidx.security:security-crypto:1.1.0-alpha03'
+    implementation 'com.google.android.material:material:1.2.1' //1.9.0
+    //kapt 'com.github.bumptech.glide:compiler:4.11.0' //4.15.1
+    implementation 'com.github.bumptech.glide:glide:4.11.0' //4.15.1
+    implementation 'com.google.android.gms:play-services-auth:19.0.0' //20.5.0
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1' //4.11.0
+    implementation 'com.squareup.okio:okio:3.0.0' //3.5.0
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1' //2.9.0
+    implementation 'com.squareup.retrofit2:converter-scalars:2.7.1' //2.9.0
+    implementation 'com.microsoft.identity.client:msal:6.2.0' //8.2.1
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1' //1.7.1
+    // Debug tooling & Testing
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == "com.squareup.okio") {
+            details.useVersion "3.0.0" //3.2.0
+            details.because("Force stable Okio version compatible with AGP 7.4.2 and Gradle 7.5")
+        }
+    }
+}
+
