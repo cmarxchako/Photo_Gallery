@@ -1,12 +1,16 @@
+################################################
+# Github.gitignore
 app/.cxx
-app/src/debug/
-app/src/test/
 app/src/androidTest/
+app/src/debug/
+#app/src/main/
+app/src/test/
 build/
 captures/
 .externalNativeBuild/
 .gradle/
 .idea/
+.older/
 .tmp/
 .temp/
 *.aab
