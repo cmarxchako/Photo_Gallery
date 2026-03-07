@@ -19,3 +19,6 @@ Droid Photo Gallery App with Cloud backup/restore and Vault..
    * Google Drive, OneDrive, etc..
 
 # DROID ALL-IN-ONE PHOTO GALLERY
+Coded with AIs:
+ * ChatGBD (😄)
+ * CoPilot
