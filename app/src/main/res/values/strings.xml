@@ -41,7 +41,7 @@
     <string name="viewMode">View Mode</string>
 
     <!-- Cloud Storage string -->
-    <string name="GDriveClientId">client-id</string>
+    <string name="GDriveClientId">673284168708-qikna8dgit46607ujf932aqq3imie7e6.apps.googleusercontent.com</string>
     <string name="GDriveSignin">Sign in to Google Drive</string>
     <string name="ODriveSignin">Sign in to MS OneDrive</string>
     <string name="ODClientId">msal46fe6c5f–0518–4436-a85a-8993094287a6</string>
