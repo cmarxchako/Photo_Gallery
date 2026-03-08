@@ -5,6 +5,7 @@ buildscript {
         compose_bom = '2023.04.00' //2024.02.00'
         compose_version = '1.2.0'  // kept for compatibility; module uses BOM where possible
         kotlin_version = '1.7.0'
+        lifecycle = '2.3.1' // 2.6.1
     }
 }
 

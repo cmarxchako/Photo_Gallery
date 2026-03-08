@@ -8,7 +8,7 @@ def gitCommitCount = "git rev-list --count HEAD".execute().text.trim()
 
 android {
     namespace 'com.droidaio.gallery'
-    compileSdkVersion 34
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.droidaio.gallery"
@@ -72,10 +72,10 @@ android {
         kotlinCompilerExtensionVersion "$compose_version"
     }
     packagingOptions {
-        resources {excludes += '/META-INF/{AL2.0,LGPL2.1}'}
+        resources { excludes += '/META-INF/{AL2.0,LGPL2.1}' }
     }
-    //ndkVersion ndk_Version
-    //buildToolsVersion buildTools_Version
+    ndkVersion ndk_Version
+    buildToolsVersion buildTools_Version
 }
 
 dependencies {
@@ -97,8 +97,8 @@ dependencies {
     */
     // Updated dependencies for Compose and related libraries
     implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"
     implementation 'androidx.activity:activity-compose:1.8.0'
     // Compose BOM (keeps versions consistent)
     implementation platform("androidx.compose:compose-bom:$compose_bom")
