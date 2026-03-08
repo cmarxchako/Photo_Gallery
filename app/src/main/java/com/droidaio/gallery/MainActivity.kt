@@ -25,6 +25,15 @@ import kotlinx.coroutines.cancel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+/**
+ * MainActivity - app entry.
+ *  - Manages pending move/copy operations with undo support using WorkManager
+ *    and a simple persistence layer.
+ *  - Provides APIs for Compose UI to start folder picker and cancel pending ops.
+ *  - Handles dynamic color theming with Material You support.
+ *  - MSAL initialization is handled in GalleryApp (Application.onCreate) to ensure
+ *    it's available app-wide without tight coupling to the Activity lifecycle.
+ */
 class MainActivity : AppCompatActivity() {
 
     enum class PendingOp { NONE, COPY, MOVE }
