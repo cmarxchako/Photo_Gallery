@@ -19,7 +19,7 @@
     <color name="md_theme_pure_black_primary">#000000</color>
     <color name="md_theme_pure_black_onPrimary">#FFFFFF</color>
     <color name="md_theme_pure_black_secondary">#000000</color>
-    <color name="md_theme_pure_black_surface">#000000</color>
+    <color name="md_theme_pure_black_surface">#1C1B1F</color>
     <color name="md_theme_pure_black_onSurface">#FFFFFF</color>
 </resources>
 
