@@ -20,5 +20,6 @@ Droid Photo Gallery App with Cloud backup/restore and Vault..
 
 # DROID ALL-IN-ONE PHOTO GALLERY
 Coded with AIs:
- * ChatGBD (😄)
- * CoPilot
+
+* ChatGBD (😄)
+* Copilot
