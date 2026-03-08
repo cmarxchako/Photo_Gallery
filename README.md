@@ -1,9 +1,9 @@
 # AIO PHOTO GALLERY
 Droid Photo Gallery App with Cloud backup/restore and Vault..
 # Android Specifications
-* 🚀 Minimum API         :23 (Marshmellow 6.0.1)
-* 📐 Target API          :33 ( 33.0.3)
-* 🧱 Jetpack Compose and nativelibs
+* 🚀 Minimum API         :23 (Marshmallow 6.0.1)
+* 📐 Target API          :33 (Tiramisu 33.0.3)
+* 🧱 Jetpack Compose and native-libs
 # Feature/Functions
  * 🔐 Encryption:
    * AES-256 encryption (for backups)
@@ -12,7 +12,7 @@ Droid Photo Gallery App with Cloud backup/restore and Vault..
  * ⚙️ Root usage:
    * Save all recordings on any storage internal/external
    * Create and delete folders for recordings
- * 🎧 Image file formarts:
+ * 🎧 Image file formats:
    * jpeg, jpg, png, webm, gif, etc..
    * avi, mp4, m4v, mkv, ts, etc..
  * ☁️ Cloud Backup:
