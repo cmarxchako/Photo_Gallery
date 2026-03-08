@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Default theme styles -->
-    <style name="Theme.PhotoGallery.Default" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@color/md_theme_light_primary</item>
-        <item name="android:navigationBarColor">@color/md_theme_light_surface</item>
+    <!--
+      Minimal compatibility theme that provides the style the build expects:
+      Theme.Material3.DayNight.NoActionBar
+      We base it on Theme.MaterialComponents.DayNight.NoActionBar which is provided by
+      com.google.android.material:material (already in your dependencies).
+      If you later want a true Material3 theme, replace parent with Material3 theme resources.
+    -->
+
+    <!-- Light theme. -->
+    <!-- App-level color attributes (fallback defaults, override if you have colors.xml) -->
+    <style name="Theme.PhotoGallery.Light" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/md_theme_light_primary</item>
+        <item name="android:statusBarColor">@color/md_theme_light_onPrimary</item>
+        <item name="android:navigationBarColor">@color/md_theme_light_onPrimary</item>
+    </style>
+
+    <!-- Dark theme. -->
+    <!-- Optional: default application theme alias used by your app -->
+    <style name="Theme.PhotoGallery.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/md_theme_dark_surface</item>
+        <item name="android:statusBarColor">@color/md_theme_dark_surface</item>
+        <item name="android:navigationBarColor">@color/md_theme_pure_black_surface</item>
+    </style>
+
+    <!-- Pure Black theme. -->
+    <!-- Optional: default application theme alias used by your app -->
+    <style name="Theme.PhotoGallery.Default" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/md_theme_pure_black_primary</item>
+        <item name="android:statusBarColor">@color/md_theme_pure_black_primary</item>
+        <item name="android:navigationBarColor">@color/md_theme_pure_black_surface</item>
     </style>
 </resources>
-
