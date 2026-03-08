@@ -9,6 +9,16 @@ import com.bumptech.glide.Glide
 import com.droidaio.gallery.databinding.ItemFolderBinding
 import com.droidaio.gallery.models.FolderInfo
 
+/**
+ * RecyclerView Adapter for displaying folders in the folder selection screen.
+ * Each item shows a thumbnail (sampleUri) and a selection indicator (simple ImageView toggle).
+ * The adapter manages a list of FolderInfo items and a set of selected folder ids.
+ * It provides methods to submit a new list of folders, get selected folder ids, and toggle selection.
+ * In a production app, you would likely want to add more features such as:
+ * - Displaying folder names and item counts
+ * - Providing better UI/UX for selection (e.g. checkboxes, multi-select mode)
+ * - Handling edge cases (e.g. no folders found, errors loading thumbnails)
+ */
 class FolderAdapter(
     private val onCheckedChanged : (folderId : String, checked : Boolean) -> Unit,
 ) : RecyclerView.Adapter<FolderAdapter.VH>() {
@@ -17,7 +27,7 @@ class FolderAdapter(
     private val selected = mutableSetOf<String>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list : List<FolderInfo>) {
+    fun submitList(list : List<FolderInfo>, saved : Set<String>) {
         items.clear()
         items.addAll(list)
         notifyDataSetChanged()
