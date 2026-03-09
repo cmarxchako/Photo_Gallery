@@ -20,8 +20,6 @@ class GalleryApp : Application() {
         @Volatile
         var msalApp : ISingleAccountPublicClientApplication? = null
             private set
-
-        fun getMsalApp() : ISingleAccountPublicClientApplication? = msalApp
     }
 
     override fun onCreate() {
