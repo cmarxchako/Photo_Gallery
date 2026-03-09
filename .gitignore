@@ -22,6 +22,7 @@ android_idea.log
 #!.idea/misc.xml
 !.idea/workspace.xml
 .DS_Store
+/gradle/gradle-daemon-jvm.properties
 *.iml
 local.properties
 !README.md
@@ -69,4 +70,3 @@ render.experimental.xml
 #*.war
 #*.zip
 
-**/databinding/
