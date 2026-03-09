@@ -6,16 +6,27 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.droidaio.gallery.models.MediaItem
-import com.microsoft.identity.client.*
+import com.microsoft.identity.client.AcquireTokenParameters
+import com.microsoft.identity.client.AcquireTokenSilentParameters
+import com.microsoft.identity.client.AuthenticationCallback
+import com.microsoft.identity.client.IAccount
+import com.microsoft.identity.client.IAuthenticationResult
+import com.microsoft.identity.client.ISingleAccountPublicClientApplication
+import com.microsoft.identity.client.PublicClientApplication
+import com.microsoft.identity.client.SilentAuthenticationCallback
 import com.microsoft.identity.client.exception.MsalClientException
 import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.client.exception.MsalUiRequiredException
-import kotlinx.coroutines.*
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -42,7 +53,7 @@ object OneDriveManager {
     fun init(context : Context) {
         if (msalApp == null) {
             msalApp = try {
-                GalleryApp.getMsalApp()
+                GalleryApp.msalApp
             } catch (ex : Exception) {
                 Log.e(TAG, "Failed to initialize MSAL PublicClientApplication", ex)
                 null
@@ -287,7 +298,7 @@ private var msalApp : PublicClientApplication? = null
 fun init(context : Context) {
 if (msalApp == null) {
 try {
-msalApp = GalleryApp.getMsalApp()
+msalApp = GalleryApp.msalApp
 } catch (ex : Exception) {
 Log.e(TAG, "Failed to initialize MSAL PublicClientApplication", ex)
 //null
@@ -454,7 +465,7 @@ private var msalApp : PublicClientApplication? = null
 fun init(context : Context) {
 if (msalApp == null) {
 // Try to reuse the application-level instance if available
-msalApp = GalleryApp.getMsalApp() ?: try {
+msalApp = GalleryApp.msalApp ?: try {
 // Fallback: create a new instance reading res/raw/auth_config.json
 PublicClientApplication(context.applicationContext)
 } catch (ex : Exception) {
