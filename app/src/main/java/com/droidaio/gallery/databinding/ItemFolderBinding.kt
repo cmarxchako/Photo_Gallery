@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.droidaio.gallery.R
 
-/*
+/**
  * Manual view-binding for item_folder.xml
 */
 class ItemFolderBinding private constructor(
