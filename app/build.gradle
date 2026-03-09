@@ -8,13 +8,15 @@ plugins {
 
 android {
     namespace 'com.droidaio.gallery'
-    compileSdk 34
+    //noinspection GradleDependency
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "com.droidaio.gallery"
         minSdkVersion 23
+        //noinspection EditedTargetSdkVersion
+        targetSdkVersion 34
         //noinspection OldTargetApi
-        targetSdkVersion 33
         versionCode 10180226
         //versionCode gitCommitCount.toInteger()
         versionName "0.1.0.18.022026"
@@ -23,21 +25,20 @@ android {
         vectorDrawables { useSupportLibrary true }
     }
 
-/*
     signingConfigs {
-        debug {
+        debug {/*
             storeFile file(System.getenv("HOME") + "/.android/debug.keystore")
             storePassword System.getenv("android")
             keyAlias System.getenv("androiddebugkey")
-            keyPassword System.getenv("android")}
+            keyPassword System.getenv("android")}*/
         }
-        release {
+        release {/*
             storeFile file(System.getenv("HOME") + "/.android/keys/photo-gallery.jks")
             storePassword System.getenv("photo-gallery")
             keyAlias System.getenv("PhotoGallery")
-            keyPassword System.getenv("photo-gallery")}
+            keyPassword System.getenv("photo-gallery")}*/
         }
-    }*/
+    }
 
     buildTypes {
         debug {
@@ -68,13 +69,14 @@ android {
         //dataBinding true   // add this only if you actually use <layout> tags with data variables
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "$compose_version"//1.4.7 compatible with Compose tooling; adjust if needed
+        kotlinCompilerExtensionVersion "$compose_version"
+//1.4.7 compatible with Compose tooling; adjust if needed
     }
     packagingOptions {
         resources { excludes += '/META-INF/{AL2.0,LGPL2.1}' }
     }
     ndkVersion ndk_Version
-    buildToolsVersion buildTools_Version
+    //buildToolsVersion buildTools_Version
 }
 
 dependencies {
@@ -117,7 +119,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy.eachDependency { details ->
         if (details.requested.group == "com.squareup.okio") {
             details.useVersion "3.0.0" //3.2.0
