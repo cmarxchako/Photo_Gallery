@@ -59,6 +59,7 @@
     <string name="tabAboutApp">About App</string>
 
     <!-- Menu strings -->
+    <string name="folder_list">Gallery Folders</string>
     <string name="folder_select">Select folders to include</string>
 
     <!-- Theme Setting strings -->
