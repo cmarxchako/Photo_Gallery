@@ -12,7 +12,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/recordingFormat" />
+        android:text="@string/recordingFormat"
+        android:textColor="#388E3C" />
 
     <Spinner
         android:id="@+id/spinnerFormat"
@@ -26,7 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/audioSource" />
+        android:text="@string/audioSource"
+        android:textColor="#388E3C" />
 
     <Spinner
         android:id="@+id/spinnerSource"
@@ -39,7 +41,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/notifyMode" />
+        android:text="@string/notifyMode"
+        android:textColor="#388E3C" />
 
     <Spinner
         android:id="@+id/spinnerNotificationMode"
@@ -52,7 +55,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/startPlayback" />
+        android:text="@string/startPlayback"
+        android:textColor="#388E3C" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchUseExternalPlayer"
@@ -61,6 +65,7 @@
         android:layout_marginTop="16dp"
         android:minHeight="48dp"
         android:text="@string/externalPlayer"
+        android:textColor="#388E3C"
         tools:ignore="VisualLintButtonSize" />
 
     <androidx.appcompat.widget.SwitchCompat
@@ -70,6 +75,7 @@
         android:layout_marginTop="16dp"
         android:minHeight="48dp"
         android:text="@string/enableRoot"
+        android:textColor="#388E3C"
         tools:ignore="VisualLintButtonSize" />
 
     <androidx.appcompat.widget.SwitchCompat
@@ -79,8 +85,10 @@
         android:layout_marginTop="16dp"
         android:minHeight="48dp"
         android:text="@string/enableOverlay"
+        android:textColor="#388E3C"
         tools:ignore="VisualLintButtonSize" />
 
+    <!--
     <Button
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -103,5 +111,5 @@
         android:text="@string/noRecording"
         android:textAlignment="center"
         tools:ignore="VisualLintButtonSize" />
-    <!-- -->
+    -->
 </LinearLayout>
