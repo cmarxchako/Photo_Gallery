@@ -29,26 +29,35 @@ import com.droidaio.gallery.models.MediaItem
  * val mediaItems = repository.queryAllMedia()
  * mediaItems.forEach {item -> println("Media item: ${item.name}, URI: ${item.uri}, MIME type: ${item.mimeType}, date: ${item.date}, size: ${item.size}") }
  */
-class MediaRepository(private val context : Context) {
+class MediaRepository(private val context: Context) {
 
-    fun queryAllMedia() : List<MediaItem> {
+    fun queryAllMedia(): List<MediaItem> {
         val items = mutableListOf<MediaItem>()
         val projection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             arrayOf(
-                MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.MEDIA_TYPE, MediaStore.MediaColumns.DISPLAY_NAME,
-                MediaStore.MediaColumns.MIME_TYPE, MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATE_TAKEN,
+                MediaStore.Files.FileColumns._ID,
+                MediaStore.Files.FileColumns.MEDIA_TYPE,
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.MIME_TYPE,
+                MediaStore.MediaColumns.DATE_ADDED,
+                MediaStore.MediaColumns.DATE_TAKEN,
                 MediaStore.MediaColumns.SIZE
             )
         } else {
             arrayOf(
-                MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.MEDIA_TYPE, MediaStore.MediaColumns.DISPLAY_NAME,
-                MediaStore.MediaColumns.MIME_TYPE, MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATE_MODIFIED,
+                MediaStore.Files.FileColumns._ID,
+                MediaStore.Files.FileColumns.MEDIA_TYPE,
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.MIME_TYPE,
+                MediaStore.MediaColumns.DATE_ADDED,
+                MediaStore.MediaColumns.DATE_MODIFIED,
                 MediaStore.MediaColumns.SIZE
             )
         }
 
-        val selection = (MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
+        val selection =
+            (MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                    + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
         val queryUri = MediaStore.Files.getContentUri("external")
         val sort = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             "${MediaStore.MediaColumns.DATE_TAKEN} DESC"
@@ -59,7 +68,8 @@ class MediaRepository(private val context : Context) {
                 "${MediaStore.MediaColumns.DATE_MODIFIED} DESC"
             }
         }
-        val cursor : Cursor? = context.contentResolver.query(queryUri, projection, selection, null, sort)
+        val cursor: Cursor? =
+            context.contentResolver.query(queryUri, projection, selection, null, sort)
         cursor?.use {
             val idIdx = it.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
             val mediaTypeIdx = it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
@@ -75,7 +85,8 @@ class MediaRepository(private val context : Context) {
                 val id = it.getLong(idIdx)
                 val mediaType = it.getInt(mediaTypeIdx)
                 val isVideo = mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
-                val contentUri = if (isVideo) MediaStore.Video.Media.EXTERNAL_CONTENT_URI else MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                val contentUri =
+                    if (isVideo) MediaStore.Video.Media.EXTERNAL_CONTENT_URI else MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 val uri = ContentUris.withAppendedId(contentUri, id)
                 val name = it.getStringOrNull(nameIdx)
                 val mime = it.getStringOrNull(mimeIdx)
@@ -87,17 +98,20 @@ class MediaRepository(private val context : Context) {
         return items
     }
 
-    fun queryFolders() : List<FolderInfo> {
+    fun queryFolders(): List<FolderInfo> {
         val folders = mutableListOf<FolderInfo>()
 
         // Projection: bucket id and bucket display name (supported by MediaStore)
         val projection = arrayOf(
-            MediaStore.Images.Media.BUCKET_ID, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Files.FileColumns._ID
+            MediaStore.Images.Media.BUCKET_ID,
+            MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+            MediaStore.Files.FileColumns._ID
         )
 
         // Query both images and videos
-        val selection = (MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
+        val selection =
+            (MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                    + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
 
         val queryUri = MediaStore.Files.getContentUri("external")
         val sortOrder = "${MediaStore.MediaColumns.DATE_ADDED} DESC"
@@ -134,19 +148,19 @@ class MediaRepository(private val context : Context) {
     }
 
     // Add inside MediaRepository (private helper)
-    private class FolderInfoBuilder(val bucketId : String, val bucketName : String) {
+    private class FolderInfoBuilder(val bucketId: String, val bucketName: String) {
         private var count = 0
-        private var sampleUri : Uri? = null
+        private var sampleUri: Uri? = null
 
         fun incrementCount() {
             count++
         }
 
-        fun maybeSetSampleUri(uri : Uri) {
+        fun maybeSetSampleUri(uri: Uri) {
             if (sampleUri == null) sampleUri = uri
         }
 
-        fun build() : FolderInfo {
+        fun build(): FolderInfo {
             return FolderInfo(
                 id = bucketId.hashCode().toLong(),
                 bucketId = bucketId,

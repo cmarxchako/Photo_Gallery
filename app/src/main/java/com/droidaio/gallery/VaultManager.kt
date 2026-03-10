@@ -22,7 +22,7 @@ object VaultManager {
 
     private const val VAULT_DIR = "vault_files"
 
-    suspend fun lockToVault(context : Context, items : List<MediaItem>) {
+    suspend fun lockToVault(context: Context, items: List<MediaItem>) {
         withContext(Dispatchers.IO) {
             val vaultDir = File(context.filesDir, VAULT_DIR)
             if (!vaultDir.exists()) vaultDir.mkdirs()
@@ -47,13 +47,13 @@ object VaultManager {
                         }
                     }
                     context.contentResolver.delete(item.uri, null, null)
-                } catch (_ : Exception) {
+                } catch (_: Exception) {
                 }
             }
         }
     }
 
-    suspend fun listVaultFiles(context : Context) : List<File> {
+    suspend fun listVaultFiles(context: Context): List<File> {
         return withContext(Dispatchers.IO) {
             val vaultDir = File(context.filesDir, VAULT_DIR)
             if (!vaultDir.exists()) return@withContext emptyList()
@@ -61,7 +61,7 @@ object VaultManager {
         }
     }
 
-    suspend fun unlockFromVault(context : Context, file : File, destUri : Uri) {
+    suspend fun unlockFromVault(context: Context, file: File, destUri: Uri) {
         withContext(Dispatchers.IO) {
             val masterKey = MasterKey.Builder(context)
                 .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -83,11 +83,11 @@ object VaultManager {
         }
     }
 
-    fun deleteVaultFile(context : Context, file : VaultFile) : Boolean {
+    fun deleteVaultFile(context: Context, file: VaultFile): Boolean {
         return try {
             val f = File(file.filePath)
             f.delete()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             false
         }

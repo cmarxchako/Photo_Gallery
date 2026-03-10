@@ -14,7 +14,7 @@ object DialogHelper {
      * Show an error dialog with Retry and Cancel.
      * If user chooses Retry, call onRetry.
      */
-    fun showRetryDialog(context : Context, title : String, message : String, onRetry : () -> Unit) {
+    fun showRetryDialog(context: Context, title: String, message: String, onRetry: () -> Unit) {
         val act = context as? Activity
         val builder = AlertDialog.Builder(context)
             .setTitle(title)
@@ -30,7 +30,7 @@ object DialogHelper {
      * If context is an Activity, show on UI thread.
      * Otherwise, just show it.
      */
-    fun showInfo(context : Context, title : String, message : String) {
+    fun showInfo(context: Context, title: String, message: String) {
         val act = context as? Activity
         val builder = AlertDialog.Builder(context)
             .setTitle(title)

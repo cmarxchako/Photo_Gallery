@@ -16,16 +16,20 @@ import java.io.File
 @Suppress("DEPRECATION")
 class VaultFragment : Fragment() {
 
-    private var _binding : FragmentVaultBinding? = null
+    private var _binding: FragmentVaultBinding? = null
     private val binding get() = _binding!!
     private val vaultAdapter by lazy { VaultAdapter() }
 
-    override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState : Bundle?) : View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentVaultBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vaultRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.vaultRecycler.adapter = vaultAdapter
 
@@ -69,7 +73,7 @@ class VaultFragment : Fragment() {
     private fun loadVaultFiles() {
         lifecycleScope.launch {
             // Note: VaultManager.listVaultFiles returns List<File> (on-disk vault files). Convert to VaultFile
-            val files : List<File> = VaultManager.listVaultFiles(requireContext())
+            val files: List<File> = VaultManager.listVaultFiles(requireContext())
             val vaultFiles = files.map { file ->
                 VaultFile(name = file.name, filePath = file.absolutePath, uri = Uri.fromFile(file))
             }

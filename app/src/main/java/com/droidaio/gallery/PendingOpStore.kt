@@ -3,7 +3,7 @@ package com.droidaio.gallery
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.*
+import java.util.UUID
 
 /**
  *  Simple SharedPreferences-backed store for PendingOperation list.
@@ -19,39 +19,39 @@ import java.util.*
  * implement.
  *
  */
-class PendingOpStore(private val context : Context) {
+class PendingOpStore(private val context: Context) {
 
     private val prefs = context.getSharedPreferences("pending_ops_store", Context.MODE_PRIVATE)
     private val gson = Gson()
     private val KEY = "pending_ops_v1"
 
-    fun loadAll() : MutableList<PendingOperation> {
+    fun loadAll(): MutableList<PendingOperation> {
         val json = prefs.getString(KEY, null) ?: return mutableListOf()
         return try {
             val type = object : TypeToken<MutableList<PendingOperation>>() {}.type
             gson.fromJson(json, type) ?: mutableListOf()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             mutableListOf()
         }
     }
 
-    fun saveAll(list : List<PendingOperation>) {
+    fun saveAll(list: List<PendingOperation>) {
         try {
             val json = gson.toJson(list)
             prefs.edit().putString(KEY, json).apply()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun add(op : PendingOperation) {
+    fun add(op: PendingOperation) {
         val list = loadAll()
         list.add(op)
         saveAll(list)
     }
 
-    fun update(op : PendingOperation) {
+    fun update(op: PendingOperation) {
         val list = loadAll()
         val idx = list.indexOfFirst { it.id == op.id }
         if (idx >= 0) {
@@ -62,7 +62,7 @@ class PendingOpStore(private val context : Context) {
         }
     }
 
-    fun remove(opId : UUID) {
+    fun remove(opId: UUID) {
         val list = loadAll()
         val newList = list.filter { it.id != opId }
         saveAll(newList)

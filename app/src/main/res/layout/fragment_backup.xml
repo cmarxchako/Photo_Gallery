@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -14,33 +14,33 @@
 
         <TextView
             android:id="@+id/title"
-            android:text="@string/backup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/backup"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="#616161"
-            android:textStyle="bold"
-            android:padding="10dp" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/googleDriveButton"
             android:layout_width="match_parent"
             android:layout_height="58dp"
-            android:text="@string/GDriveSignin"
-            android:textSize="14sp"
-            android:textAlignment="center"
             android:layout_marginTop="30dp"
+            android:text="@string/GDriveSignin"
+            android:textAlignment="center"
+            android:textSize="14sp"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/oneDriveButton"
             android:layout_width="match_parent"
             android:layout_height="58dp"
-            android:text="@string/ODriveSignin"
-            android:textSize="14sp"
-            android:textAlignment="center"
             android:layout_marginTop="30dp"
+            android:text="@string/ODriveSignin"
+            android:textAlignment="center"
+            android:textSize="14sp"
             tools:ignore="ButtonStyle" />
     </LinearLayout>
 
@@ -53,10 +53,10 @@
             android:id="@+id/backupAllButton"
             android:layout_width="match_parent"
             android:layout_height="58dp"
-            android:text="@string/backupMedia"
-            android:textSize="14sp"
-            android:textAlignment="center"
             android:layout_marginTop="380dp"
+            android:text="@string/backupMedia"
+            android:textAlignment="center"
+            android:textSize="14sp"
             tools:ignore="ButtonStyle" />
     </LinearLayout>
 </LinearLayout>

@@ -62,13 +62,17 @@ object FileOperations {
     // Below are progress-aware implementations that use OpenableColumns.SIZE
     // when available to provide more accurate per-item progress.
 
-    suspend fun deleteMediaWithProgress(context : Context, items : List<MediaItem>, progress : (itemIndex : Int, percent : Int) -> Unit) {
+    suspend fun deleteMediaWithProgress(
+        context: Context,
+        items: List<MediaItem>,
+        progress: (itemIndex: Int, percent: Int) -> Unit
+    ) {
         withContext(Dispatchers.IO) {
             items.forEachIndexed { idx, item ->
                 try {
                     context.contentResolver.delete(item.uri, null, null)
                     progress(idx, 100)
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     val doc = DocumentFile.fromSingleUri(context, item.uri)
                     doc?.delete()
                     progress(idx, 100)
@@ -77,7 +81,12 @@ object FileOperations {
         }
     }
 
-    suspend fun copyToUriWithProgress(context : Context, treeUri : Uri, items : List<MediaItem>, progress : (itemIndex : Int, percent : Int) -> Unit) {
+    suspend fun copyToUriWithProgress(
+        context: Context,
+        treeUri: Uri,
+        items: List<MediaItem>,
+        progress: (itemIndex: Int, percent: Int) -> Unit
+    ) {
         withContext(Dispatchers.IO) {
             val docTree = DocumentFile.fromTreeUri(context, treeUri) ?: return@withContext
             items.forEachIndexed { idx, item ->
@@ -90,19 +99,27 @@ object FileOperations {
                     * tracking, otherwise fall back to asset file descriptor length
                     */
                     val totalSize = querySizeForUri(context.contentResolver, item.uri).let { size ->
-                        if (size > 0) size else queryAssetFileDescriptorLength(context.contentResolver, item.uri)
+                        if (size > 0) size else queryAssetFileDescriptorLength(
+                            context.contentResolver,
+                            item.uri
+                        )
                     }
 
                     context.contentResolver.openInputStream(item.uri).use { input ->
                         context.contentResolver.openOutputStream(dest.uri).use { out ->
                             if (input != null && out != null) {
-                                copyStreamWithProgress(input, out, totalSize) { percent -> progress(idx, percent) }
+                                copyStreamWithProgress(input, out, totalSize) { percent ->
+                                    progress(
+                                        idx,
+                                        percent
+                                    )
+                                }
                             } else {
                                 progress(idx, 100)
                             }
                         }
                     }
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     e.printStackTrace()
                     progress(idx, 100)
                 }
@@ -110,17 +127,25 @@ object FileOperations {
         }
     }
 
-    suspend fun moveToUriWithProgress(context : Context, treeUri : Uri, items : List<MediaItem>, progress : (itemIndex : Int, percent : Int) -> Unit) {
+    suspend fun moveToUriWithProgress(
+        context: Context,
+        treeUri: Uri,
+        items: List<MediaItem>,
+        progress: (itemIndex: Int, percent: Int) -> Unit
+    ) {
         withContext(Dispatchers.IO) {
             // Move = copy then delete
             copyToUriWithProgress(context, treeUri, items, progress)
-            deleteMediaWithProgress(context, items) { idx, _ -> /* no per-item percent for delete */ }
+            deleteMediaWithProgress(
+                context,
+                items
+            ) { idx, _ -> /* no per-item percent for delete */ }
         }
     }
 
-    private fun querySizeForUri(resolver : ContentResolver, uri : Uri?) : Long {
+    private fun querySizeForUri(resolver: ContentResolver, uri: Uri?): Long {
         if (uri == null) return -1L
-        var cursor : Cursor? = null
+        var cursor: Cursor? = null
         return try {
             cursor = resolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)
             if (cursor != null && cursor.moveToFirst()) {
@@ -134,29 +159,34 @@ object FileOperations {
             } else {
                 -1L
             }
-        } catch (_ : Exception) {
+        } catch (_: Exception) {
             -1L
         } finally {
             cursor?.close()
         }
     }
 
-    private fun queryAssetFileDescriptorLength(resolver : ContentResolver, uri : Uri?) : Long {
+    private fun queryAssetFileDescriptorLength(resolver: ContentResolver, uri: Uri?): Long {
         if (uri == null) return -1L
         return try {
             resolver.openAssetFileDescriptor(uri, "r")?.use { afd ->
                 val length = afd.length
                 if (length > 0) length else -1L
             } ?: -1L
-        } catch (_ : Exception) {
+        } catch (_: Exception) {
             -1L
         }
     }
 
-    private fun copyStreamWithProgress(input : InputStream, out : OutputStream, totalSize : Long, progressCb : (percent : Int) -> Unit) {
+    private fun copyStreamWithProgress(
+        input: InputStream,
+        out: OutputStream,
+        totalSize: Long,
+        progressCb: (percent: Int) -> Unit
+    ) {
         val buffer = ByteArray(8 * 1024)
         var total = 0L
-        var read : Int
+        var read: Int
         var lastPercent = -1
         if (totalSize > 0) {
             while (true) {
@@ -199,12 +229,12 @@ object FileOperations {
      * Note: this does not provide per-item progress since delete is usually fast,
      * but could be extended similarly to copy if desired.
      */
-    suspend fun deleteMedia(context : Context, items : List<MediaItem>) {
+    suspend fun deleteMedia(context: Context, items: List<MediaItem>) {
         withContext(Dispatchers.IO) {
             items.forEach { item ->
                 try {
                     context.contentResolver.delete(item.uri, null, null)
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     // fallback: try to delete via DocumentFile if possible
                     val doc = DocumentFile.fromSingleUri(context, item.uri)
                     doc?.delete()
@@ -221,7 +251,7 @@ object FileOperations {
      * Note: these do not provide progress updates since the actual copy/move happens in the
      * caller after folder selection.
      */
-    suspend fun copyToFolderWithPicker(activity : Activity, items : List<MediaItem>) {
+    suspend fun copyToFolderWithPicker(activity: Activity, items: List<MediaItem>) {
         withContext(Dispatchers.Main) {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
             activity.startActivityForResult(intent, COPYPICKERREQUEST)
@@ -237,7 +267,7 @@ object FileOperations {
      * Note: this does not provide progress updates since the actual move happens in the
      * caller after folder selection.
      */
-    suspend fun moveToFolderWithPicker(activity : Activity, items : List<MediaItem>) {
+    suspend fun moveToFolderWithPicker(activity: Activity, items: List<MediaItem>) {
         withContext(Dispatchers.Main) {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
             activity.startActivityForResult(intent, MOVEPICKERREQUEST)
@@ -251,7 +281,7 @@ object FileOperations {
      * Note: this does not provide progress updates since it's a simple copy
      * without per-item tracking.
      */
-    suspend fun copyToUri(context : Context, treeUri : Uri, items : List<MediaItem>) {
+    suspend fun copyToUri(context: Context, treeUri: Uri, items: List<MediaItem>) {
         withContext(Dispatchers.IO) {
             val docTree = DocumentFile.fromTreeUri(context, treeUri) ?: return@withContext
             items.forEach { item ->
@@ -266,7 +296,7 @@ object FileOperations {
                             }
                         }
                     }
-                } catch (_ : Exception) {
+                } catch (_: Exception) {
                 }
             }
         }
@@ -278,7 +308,7 @@ object FileOperations {
      * Note: this does not provide progress updates since it's a simple move
      * without per-item tracking.
      */
-    suspend fun moveToUri(context : Context, treeUri : Uri, items : List<MediaItem>) {
+    suspend fun moveToUri(context: Context, treeUri: Uri, items: List<MediaItem>) {
         copyToUri(context, treeUri, items)
         deleteMedia(context, items)
     }

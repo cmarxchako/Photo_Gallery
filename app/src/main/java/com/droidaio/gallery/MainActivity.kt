@@ -42,15 +42,15 @@ class MainActivity : AppCompatActivity() {
 
     enum class PendingOp { NONE, COPY, MOVE }
 
-    private lateinit var requestPermissionsLauncher : ActivityResultLauncher<Array<String>>
-    private lateinit var folderPickerLauncher : ActivityResultLauncher<Intent>
+    private lateinit var requestPermissionsLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var folderPickerLauncher: ActivityResultLauncher<Intent>
 
     // Pending items to move/copy (set by Compose UI via MainActivity)
     @Volatile
-    private var pendingItemsForOp : List<MediaItem> = emptyList()
+    private var pendingItemsForOp: List<MediaItem> = emptyList()
 
     // Persistence store
-    private lateinit var opStore : PendingOpStore
+    private lateinit var opStore: PendingOpStore
 
     // WorkManager
     private val workManager by lazy { WorkManager.getInstance(applicationContext) }
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         private const val WORK_INPUT_KEY = "pending_op_json"
     }
 
-    override fun onCreate(savedInstanceState : Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         // Apply dynamic colors using the Application instance (fixes type mismatch)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             DynamicColors.applyToActivitiesIfAvailable(application)
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         ThemeManager.applySavedTheme(applicationContext)
         val choice = ThemeManager.getSavedTheme(applicationContext)
-        if (choice == ThemeManager.ThemeChoice.PURE_BLACK) {
+        if (choice == ThemeManager.ThemeChoice.BLACK) {
             setTheme(R.style.Theme_PhotoGallery_PureBlack)
         } else {
             setTheme(R.style.Theme_PhotoGallery_Default)
@@ -85,21 +85,23 @@ class MainActivity : AppCompatActivity() {
         // MSAL initialization is handled in GalleryApp (Application.onCreate).
         // Rely on GalleryApp.msalApp where needed; do not call PublicClientApplication constructor here.
 
-        requestPermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {}
+        requestPermissionsLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {}
 
-        folderPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val data = result.data
-            if (data != null && result.resultCode == RESULT_OK) {
-                val treeUri : Uri? = data.data
-                if (treeUri != null) {
-                    contentResolver.takePersistableUriPermission(
-                        treeUri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                    )
-                    onFolderPicked(treeUri)
+        folderPickerLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                val data = result.data
+                if (data != null && result.resultCode == RESULT_OK) {
+                    val treeUri: Uri? = data.data
+                    if (treeUri != null) {
+                        contentResolver.takePersistableUriPermission(
+                            treeUri,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                        )
+                        onFolderPicked(treeUri)
+                    }
                 }
             }
-        }
 
         requestNecessaryPermissions()
 
@@ -107,7 +109,8 @@ class MainActivity : AppCompatActivity() {
         restorePendingOperations()
 
         setContent {
-            val usePureBlack = (ThemeManager.getSavedTheme(applicationContext) == ThemeManager.ThemeChoice.PURE_BLACK)
+            val usePureBlack =
+                (ThemeManager.getSavedTheme(applicationContext) == ThemeManager.ThemeChoice.BLACK)
             PhotoGalleryTheme(
                 usePureBlack = usePureBlack,
                 darkTheme = (ThemeManager.getSavedTheme(applicationContext) == ThemeManager.ThemeChoice.DARK || usePureBlack)
@@ -137,7 +140,10 @@ class MainActivity : AppCompatActivity() {
      * Called by Compose UI to start a folder picker for a move or copy operation.
      * Compose should set pendingItemsForOp and also set a transient opType via startFolderPickerForOperationWithType.
      */
-    fun startFolderPickerForOperationWithType(opType : PendingOperation.Type, items : List<MediaItem>) {
+    fun startFolderPickerForOperationWithType(
+        opType: PendingOperation.Type,
+        items: List<MediaItem>
+    ) {
         // store pending items temporarily until folder is picked
         pendingItemsForOp = items
         transientOpType = opType
@@ -147,9 +153,9 @@ class MainActivity : AppCompatActivity() {
 
     // transient op type set by Compose before launching folder picker
     @Volatile
-    private var transientOpType : PendingOperation.Type? = null
+    private var transientOpType: PendingOperation.Type? = null
 
-    private fun onFolderPicked(treeUri : Uri) {
+    private fun onFolderPicked(treeUri: Uri) {
         val items = pendingItemsForOp
         val opType = transientOpType ?: PendingOperation.Type.COPY
         // reset transient state
@@ -191,14 +197,24 @@ class MainActivity : AppCompatActivity() {
         workManager.enqueueUniqueWork(uniqueName, ExistingWorkPolicy.REPLACE, work)
 
         // notify Compose UI
-        AppEventBus.tryPost(AppEventBus.UiEvent.ShowUndoableSnackbar(id = op.id, message = "${op.type.name} scheduled"))
-        AppEventBus.tryPost(AppEventBus.UiEvent.ShowProgress(id = op.id, message = "${op.type.name} scheduled"))
+        AppEventBus.tryPost(
+            AppEventBus.UiEvent.ShowUndoableSnackbar(
+                id = op.id,
+                message = "${op.type.name} scheduled"
+            )
+        )
+        AppEventBus.tryPost(
+            AppEventBus.UiEvent.ShowProgress(
+                id = op.id,
+                message = "${op.type.name} scheduled"
+            )
+        )
     }
 
     /**
      * Cancel scheduled op (called by Compose when user taps Undo).
      */
-    fun cancelScheduledOp(opId : UUID) {
+    fun cancelScheduledOp(opId: UUID) {
         val uniqueName = "op_$opId"
         workManager.cancelUniqueWork(uniqueName)
         // update persisted op status
@@ -210,35 +226,47 @@ class MainActivity : AppCompatActivity() {
             opStore.update(op)
         }
         AppEventBus.tryPost(AppEventBus.UiEvent.HideProgress(id = opId))
-        AppEventBus.tryPost(AppEventBus.UiEvent.ShowSnackbar(id = opId, message = "Operation cancelled"))
+        AppEventBus.tryPost(
+            AppEventBus.UiEvent.ShowSnackbar(
+                id = opId,
+                message = "Operation cancelled"
+            )
+        )
     }
 
     /**
      * Return persisted operations for the history UI.
      */
-    fun getPersistedOperations() : List<PendingOperation> = opStore.loadAll().sortedByDescending { it.createdAt }
+    fun getPersistedOperations(): List<PendingOperation> =
+        opStore.loadAll().sortedByDescending { it.createdAt }
 
     /**
      * Restore persisted PENDING operations on startup and re-enqueue them with WorkManager.
      */
     private fun restorePendingOperations() {
         val list = opStore.loadAll()
-        list.filter { it.status == PendingOperation.Status.PENDING || it.status == PendingOperation.Status.SCHEDULED }.forEach { op ->
-            // re-enqueue work with remaining attempts info
-            val json = gson.toJson(op)
-            val input = Data.Builder().putString(WORK_INPUT_KEY, json).build()
-            val work = OneTimeWorkRequestBuilder<OperationWorker>()
-                .setInputData(input)
-                .setInitialDelay(OP_UNDO_DELAY_MS, TimeUnit.MILLISECONDS)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10_000, TimeUnit.MILLISECONDS)
-                .build()
-            val uniqueName = "op_${op.id}"
-            workManager.enqueueUniqueWork(uniqueName, ExistingWorkPolicy.KEEP, work)
-            // mark as scheduled
-            op.status = PendingOperation.Status.SCHEDULED
-            opStore.update(op)
-            AppEventBus.tryPost(AppEventBus.UiEvent.ShowProgress(id = op.id, message = "${op.type.name} resuming"))
-        }
+        list.filter { it.status == PendingOperation.Status.PENDING || it.status == PendingOperation.Status.SCHEDULED }
+            .forEach { op ->
+                // re-enqueue work with remaining attempts info
+                val json = gson.toJson(op)
+                val input = Data.Builder().putString(WORK_INPUT_KEY, json).build()
+                val work = OneTimeWorkRequestBuilder<OperationWorker>()
+                    .setInputData(input)
+                    .setInitialDelay(OP_UNDO_DELAY_MS, TimeUnit.MILLISECONDS)
+                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10_000, TimeUnit.MILLISECONDS)
+                    .build()
+                val uniqueName = "op_${op.id}"
+                workManager.enqueueUniqueWork(uniqueName, ExistingWorkPolicy.KEEP, work)
+                // mark as scheduled
+                op.status = PendingOperation.Status.SCHEDULED
+                opStore.update(op)
+                AppEventBus.tryPost(
+                    AppEventBus.UiEvent.ShowProgress(
+                        id = op.id,
+                        message = "${op.type.name} resuming"
+                    )
+                )
+            }
     }
 
     override fun onDestroy() {

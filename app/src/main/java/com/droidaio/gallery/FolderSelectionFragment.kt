@@ -19,17 +19,21 @@ import kotlinx.coroutines.withContext
  */
 class FolderSelectionFragment : Fragment() {
 
-    private var _binding : FragmentFolderSelectionBinding? = null
+    private var _binding: FragmentFolderSelectionBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapter : FolderAdapter
+    private lateinit var adapter: FolderAdapter
     private val repository by lazy { MediaRepository(requireContext()) }
 
-    override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState : Bundle?) : View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentFolderSelectionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         adapter = FolderAdapter { _, _ -> }
         binding.foldersRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.foldersRecycler.adapter = adapter
@@ -69,7 +73,7 @@ class FolderSelectionFragment : Fragment() {
             adapter.submitList(folders, saved)
             binding.progress.visibility = View.GONE
         }
-            return emptyList()
+        return emptyList()
     }
 
     override fun onDestroyView() {

@@ -26,12 +26,12 @@ import java.io.Serializable
  * directly.
  */
 data class MediaItem(
-    val id : Long,
-    val uri : Uri,
-    val displayName : String?,
-    val mimeType : String?,
-    val dateTaken : Long?,
-    val size : Long?,
-    val isVideo : Boolean,
+    val id: Long,
+    val uri: Uri,
+    val displayName: String?,
+    val mimeType: String?,
+    val dateTaken: Long?,
+    val size: Long?,
+    val isVideo: Boolean,
 ) : Serializable
 

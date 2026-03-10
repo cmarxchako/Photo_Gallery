@@ -34,7 +34,7 @@ object OneDriveManager {
 
     private const val TAG = "OneDriveManager"
     private val SCOPES = arrayOf("Files.ReadWrite.All", "offline_access", "User.Read")
-    private var msalApp : ISingleAccountPublicClientApplication? = null
+    private var msalApp: ISingleAccountPublicClientApplication? = null
 
     /*
      * Ensure msalApp is initialized. Prefer the instance created in GalleryApp.
@@ -50,11 +50,11 @@ object OneDriveManager {
      * Initialize msalApp (prefer the centralized instance created in GalleryApp).
      * We cast the GalleryApp-held instance into the IPublicClientApplication interface to use the public APIs.
      */
-    fun init(context : Context) {
+    fun init(context: Context) {
         if (msalApp == null) {
             msalApp = try {
                 GalleryApp.msalApp
-            } catch (ex : Exception) {
+            } catch (ex: Exception) {
                 Log.e(TAG, "Failed to initialize MSAL PublicClientApplication", ex)
                 null
             }
@@ -67,10 +67,10 @@ object OneDriveManager {
      * Basic signin check (non-blocking). This is a conservative check: it returns true if the MSAL client
      * is available. A precise signed-in status requiring account lookup is asynchronous — see getAnyAccount().
      */
-    fun isSignedIn() : Boolean = try {
+    fun isSignedIn(): Boolean = try {
         initIfNeeded()
         msalApp != null
-    } catch (ex : Exception) {
+    } catch (ex: Exception) {
         Log.e(TAG, "Error checking sign-in status", ex)
         false
     }
@@ -79,7 +79,7 @@ object OneDriveManager {
      * Start an interactive sign-in flow.
      * Caller must call this from an Activity.
      */
-    fun signIn(activity : Activity, callback : AuthenticationCallback) {
+    fun signIn(activity: Activity, callback: AuthenticationCallback) {
         msalApp?.signIn(activity, null, SCOPES, callback) ?: callback.onError(
             MsalClientException("MSAL_NOT_INITIALIZED", "MSAL not initialized")
         )
@@ -90,7 +90,7 @@ object OneDriveManager {
      * MSAL apps. This wraps the MSAL callbacks and returns the first found IAccount or null
      * if none.
      */
-    private suspend fun getAnyAccount() : IAccount? = suspendCancellableCoroutine { cont ->
+    private suspend fun getAnyAccount(): IAccount? = suspendCancellableCoroutine { cont ->
         try {
             val app = msalApp
             if (app == null) {
@@ -99,21 +99,22 @@ object OneDriveManager {
             }
 
             // If the app is a single-account application, use getCurrentAccountAsync
-            app.getCurrentAccountAsync(object : ISingleAccountPublicClientApplication.CurrentAccountCallback {
-                override fun onAccountLoaded(currentAccount : IAccount?) {
+            app.getCurrentAccountAsync(object :
+                ISingleAccountPublicClientApplication.CurrentAccountCallback {
+                override fun onAccountLoaded(currentAccount: IAccount?) {
                     cont.resume(currentAccount)
                 }
 
-                override fun onAccountChanged(priorAccount : IAccount?, currentAccount : IAccount?) {
+                override fun onAccountChanged(priorAccount: IAccount?, currentAccount: IAccount?) {
                     // treat as loaded with the currentAccount
                     cont.resume(currentAccount)
                 }
 
-                override fun onError(exception : MsalException) {
+                override fun onError(exception: MsalException) {
                     cont.resumeWithException(exception)
                 }
             })
-        } catch (ex : Exception) {
+        } catch (ex: Exception) {
             cont.resumeWithException(ex)
         }
     }
@@ -123,7 +124,7 @@ object OneDriveManager {
      * This suspends until the result or error.
      */
     @OptIn(DelicateCoroutinesApi::class)
-    private suspend fun getAccessTokenSilent() : String = suspendCancellableCoroutine { cont ->
+    private suspend fun getAccessTokenSilent(): String = suspendCancellableCoroutine { cont ->
         try {
             val app = msalApp
             if (app == null) {
@@ -146,22 +147,22 @@ object OneDriveManager {
                         .withScopes(SCOPES.toList())
                         .forAccount(account)
                         .withCallback(object : SilentAuthenticationCallback {
-                            override fun onSuccess(authenticationResult : IAuthenticationResult) {
+                            override fun onSuccess(authenticationResult: IAuthenticationResult) {
                                 cont.resume(authenticationResult.accessToken)
                             }
 
-                            override fun onError(exception : MsalException) {
+                            override fun onError(exception: MsalException) {
                                 cont.resumeWithException(exception)
                             }
                         })
                         .build()
 
                     msalApp!!.acquireTokenSilent(silentParams)
-                } catch (ex : Exception) {
+                } catch (ex: Exception) {
                     cont.resumeWithException(ex)
                 }
             }
-        } catch (ex : Exception) {
+        } catch (ex: Exception) {
             cont.resumeWithException(ex)
         }
     }
@@ -176,7 +177,7 @@ object OneDriveManager {
      * Interactive sign-in helper (backwards compatibility). Caller provides an AuthenticationCallback
      * to handle success/error/cancel. We attempt to call the library convenience method if available.
      */
-    fun acquireTokenInteractive(activity : Activity, callback : AuthenticationCallback) {
+    fun acquireTokenInteractive(activity: Activity, callback: AuthenticationCallback) {
         init(activity)
         msalApp?.let { app ->
             try {
@@ -188,9 +189,12 @@ object OneDriveManager {
                         app.acquireToken(activity, SCOPES, callback)
                         return
                     }
-                } catch (_ : Throwable) {
+                } catch (_: Throwable) {
                     // If the above fails (e.g. method not found), we fall back to the builder approach below.
-                    Log.w(TAG, "MSAL app acquireToken with Activity failed. Falling back to builder.")
+                    Log.w(
+                        TAG,
+                        "MSAL app acquireToken with Activity failed. Falling back to builder."
+                    )
                 }
 
                 val builder = AcquireTokenParameters.Builder()
@@ -199,9 +203,14 @@ object OneDriveManager {
                     .withCallback(callback)
                 val params = builder.build()
                 app.acquireToken(params)
-            } catch (ex : Exception) {
+            } catch (ex: Exception) {
                 Log.e(TAG, "Failed to acquire token interactively", ex)
-                callback.onError(MsalClientException("acquire_interactive_failed", ex.localizedMessage ?: "Failed to acquire token interactively"))
+                callback.onError(
+                    MsalClientException(
+                        "acquire_interactive_failed",
+                        ex.localizedMessage ?: "Failed to acquire token interactively"
+                    )
+                )
             }
         } ?: run {
             Log.w(TAG, "MSAL app not initialized (call OneDriveManager.init(context) early).")
@@ -213,16 +222,19 @@ object OneDriveManager {
      * Upload files using a silent token (acquireTokenSilent). If silent fails, caller
      * should trigger interactive sign-in.
      */
-    suspend fun uploadFiles(context : Context, items : List<MediaItem>) {
+    suspend fun uploadFiles(context: Context, items: List<MediaItem>) {
         withContext(Dispatchers.IO) {
             val token = try {
                 getAccessTokenSilent()
-            } catch (ex : Exception) {
+            } catch (ex: Exception) {
                 // If a UI interaction is required, MSAL will throw MsalUiRequiredException — surface this so caller can act.
                 if (ex is MsalUiRequiredException) {
                     throw ex
                 }
-                throw IllegalStateException("Failed to acquire OneDrive access token silently: ${ex.message}", ex)
+                throw IllegalStateException(
+                    "Failed to acquire OneDrive access token silently: ${ex.message}",
+                    ex
+                )
             }
 
             val client = OkHttpClient()
@@ -232,8 +244,13 @@ object OneDriveManager {
                         if (input != null) {
                             val bytes = input.readBytes()
                             val fileName = item.displayName ?: "file_${item.id}"
-                            val url = "https://graph.microsoft.com/v1.0/me/drive/root:/$fileName:/content"
-                            val body = bytes.toRequestBody(item.mimeType?.toMediaTypeOrNull(), 0, bytes.size)
+                            val url =
+                                "https://graph.microsoft.com/v1.0/me/drive/root:/$fileName:/content"
+                            val body = bytes.toRequestBody(
+                                item.mimeType?.toMediaTypeOrNull(),
+                                0,
+                                bytes.size
+                            )
                             val request = Request.Builder()
                                 .url(url)
                                 .addHeader("Authorization", "Bearer $token")
@@ -241,7 +258,10 @@ object OneDriveManager {
                                 .build()
                             client.newCall(request).execute().use { resp ->
                                 if (!resp.isSuccessful) {
-                                    Log.e(TAG, "OneDrive upload failed: ${resp.code} ${resp.message}")
+                                    Log.e(
+                                        TAG,
+                                        "OneDrive upload failed: ${resp.code} ${resp.message}"
+                                    )
                                     throw RuntimeException("OneDrive upload failed: ${resp.code} ${resp.message}")
                                 }
                             }
@@ -249,7 +269,7 @@ object OneDriveManager {
                             Log.w(TAG, "Cannot open input stream for ${item.uri}")
                         }
                     }
-                } catch (ex : Exception) {
+                } catch (ex: Exception) {
                     Log.e(TAG, "Upload error", ex)
                     throw ex
                 }

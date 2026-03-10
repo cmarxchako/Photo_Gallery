@@ -15,10 +15,10 @@ import android.net.Uri
  * val folderInfo = FolderInfo(id = 123L, bucketId = "bucket_123", bucketName = "Camera", sampleUri = Uri.parse("content://media/external/images/media/123"), itemCount = 42)
  */
 data class FolderInfo(
-    val id : Long,
-    val bucketId : String?,
-    val bucketName : String?,
-    val sampleUri : Uri? = null,
-    val itemCount : Int = 0,
+    val id: Long,
+    val bucketId: String?,
+    val bucketName: String?,
+    val sampleUri: Uri? = null,
+    val itemCount: Int = 0,
 )
 

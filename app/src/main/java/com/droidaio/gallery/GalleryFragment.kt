@@ -16,13 +16,20 @@ import com.droidaio.gallery.ui.theme.PhotoGalleryTheme
  */
 class GalleryFragment : Fragment() {
 
-    override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState : Bundle?) : View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val composeView = ComposeView(requireContext()).apply {
             setContent {
                 // Use ThemeManager to determine pure-black/dark if needed
                 val choice = ThemeManager.getSavedTheme(requireContext())
-                val usePureBlack = (choice == ThemeManager.ThemeChoice.PURE_BLACK)
-                PhotoGalleryTheme(usePureBlack = usePureBlack, darkTheme = (choice == ThemeManager.ThemeChoice.DARK || usePureBlack)) {
+                val usePureBlack = (choice == ThemeManager.ThemeChoice.BLACK)
+                PhotoGalleryTheme(
+                    usePureBlack = usePureBlack,
+                    darkTheme = (choice == ThemeManager.ThemeChoice.DARK || usePureBlack)
+                ) {
                     GalleryScreen(
                         onOpenBackup = { findNavController().navigate("backup") },
                         onOpenSettings = { findNavController().navigate("settings") }

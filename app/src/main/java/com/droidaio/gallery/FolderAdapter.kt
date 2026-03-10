@@ -20,27 +20,27 @@ import com.droidaio.gallery.models.FolderInfo
  * - Handling edge cases (e.g. no folders found, errors loading thumbnails)
  */
 class FolderAdapter(
-    private val onCheckedChanged : (folderId : String, checked : Boolean) -> Unit,
+    private val onCheckedChanged: (folderId: String, checked: Boolean) -> Unit,
 ) : RecyclerView.Adapter<FolderAdapter.VH>() {
 
     private val items = mutableListOf<FolderInfo>()
     private val selected = mutableSetOf<String>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list : List<FolderInfo>, saved : Set<String>) {
+    fun submitList(list: List<FolderInfo>, saved: Set<String>) {
         items.clear()
         items.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun getSelectedFolderIds() : List<String> = selected.toList()
+    fun getSelectedFolderIds(): List<String> = selected.toList()
 
-    override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : VH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val binding = ItemFolderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
 
-    override fun onBindViewHolder(holder : VH, position : Int) {
+    override fun onBindViewHolder(holder: VH, position: Int) {
         val item = items[position]
         val folderKey = item.bucketId ?: item.id.toString()
         holder.bind(item, selected.contains(folderKey))
@@ -55,10 +55,10 @@ class FolderAdapter(
         }
     }
 
-    override fun getItemCount() : Int = items.size
+    override fun getItemCount(): Int = items.size
 
-    inner class VH(val binding : ItemFolderBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item : FolderInfo, isSelected : Boolean) {
+    class VH(val binding: ItemFolderBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: FolderInfo, isSelected: Boolean) {
             // thumbnail
             Glide.with(binding.root)
                 .load(item.sampleUri)
@@ -96,7 +96,7 @@ class FolderAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun toggleSelection(bucketId : String) {
+    private fun toggleSelection(bucketId: String) {
         if (selected.contains(bucketId)) selected.remove(bucketId) else selected.add(bucketId)
         notifyDataSetChanged()
     }

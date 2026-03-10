@@ -7,7 +7,7 @@ import com.droidaio.gallery.models.MediaItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-suspend fun performBackup(context : Context, items : List<MediaItem>) {
+suspend fun performBackup(context: Context, items: List<MediaItem>) {
     withContext(Dispatchers.IO) {
         try {
             BackupManager.backupToGoogleDrive(context, items)
@@ -17,7 +17,7 @@ suspend fun performBackup(context : Context, items : List<MediaItem>) {
     }
 }
 
-suspend fun performVault(context : Context, items : List<MediaItem>) {
+suspend fun performVault(context: Context, items: List<MediaItem>) {
     withContext(Dispatchers.IO) {
         VaultManager.lockToVault(context, items)
     }

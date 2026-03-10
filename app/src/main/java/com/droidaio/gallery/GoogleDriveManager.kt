@@ -32,8 +32,8 @@ object GoogleDriveManager {
     /**
      * Build the Google Sign-In intent.
      * We request a server auth code so the backend can exchange it for refresh tokens.
-    */
-    fun getSignInIntent(activity : Activity) : Intent {
+     */
+    fun getSignInIntent(activity: Activity): Intent {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestScopes(Scope("@string/GDScope"))
             .requestEmail()
@@ -43,7 +43,7 @@ object GoogleDriveManager {
         return client.signInIntent
     }
 
-    fun getSignedInAccount(context : Context) : GoogleSignInAccount? {
+    fun getSignedInAccount(context: Context): GoogleSignInAccount? {
         return GoogleSignIn.getLastSignedInAccount(context)
     }
 
@@ -56,9 +56,9 @@ object GoogleDriveManager {
      * This method stores only a short-lived access token if returned by server; refresh tokens must be stored server-side.
     */
     suspend fun onSignInSuccessAndExchange(
-        context : Context,
-        account : GoogleSignInAccount,
-        serverExchangeUrl : String,
+        context: Context,
+        account: GoogleSignInAccount,
+        serverExchangeUrl: String,
     ) {
         withContext(Dispatchers.IO) {
             try {
@@ -74,7 +74,8 @@ object GoogleDriveManager {
                 }
 
                 val client = OkHttpClient()
-                val body = payload.toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+                val body = payload.toString()
+                    .toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
                 val request = Request.Builder()
                     .url(serverExchangeUrl)
                     .post(body)
@@ -99,7 +100,7 @@ object GoogleDriveManager {
                         // Do not store refresh token on device. Server stores refresh token securely.
                     }
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 Log.e(TAG, "onSignInSuccessAndExchange error", e)
                 throw e
             }
@@ -110,7 +111,7 @@ object GoogleDriveManager {
      * Upload files to Drive using an access token previously obtained (either client-side or from server).
      * If no token is available, caller should prompt sign-in and server exchange.
     */
-    suspend fun uploadFiles(context : Context, items : List<MediaItem>, accessToken : String) {
+    suspend fun uploadFiles(context: Context, items: List<MediaItem>, accessToken: String) {
         withContext(Dispatchers.IO) {
             if (accessToken.isBlank()) {
                 Log.e(TAG, "No Google access token provided for upload")
@@ -121,13 +122,25 @@ object GoogleDriveManager {
                 try {
                     context.contentResolver.openInputStream(item.uri).use { input ->
                         if (input != null) {
-                            val metadataJson = """{"name":"${item.displayName ?: "file_${item.id}"}"}"""
-                            val metadataPart = metadataJson.toRequestBody("application/json; charset=UTF-8".toMediaTypeOrNull())
+                            val metadataJson =
+                                """{"name":"${item.displayName ?: "file_${item.id}"}"}"""
+                            val metadataPart =
+                                metadataJson.toRequestBody("application/json; charset=UTF-8".toMediaTypeOrNull())
                             val fileBytes = input.readBytes()
-                            val filePart = fileBytes.toRequestBody(item.mimeType?.toMediaTypeOrNull(), 0, fileBytes.size)
+                            val filePart = fileBytes.toRequestBody(
+                                item.mimeType?.toMediaTypeOrNull(),
+                                0,
+                                fileBytes.size
+                            )
                             val multipartBody = MultipartBody.Builder().setType(MultipartBody.MIXED)
                                 .addPart(MultipartBody.Part.create(metadataPart))
-                                .addPart(MultipartBody.Part.createFormData("file", item.displayName ?: "file", filePart))
+                                .addPart(
+                                    MultipartBody.Part.createFormData(
+                                        "file",
+                                        item.displayName ?: "file",
+                                        filePart
+                                    )
+                                )
                                 .build()
                             val request = Request.Builder()
                                 .url(DRIVE_UPLOAD_URL)
@@ -144,7 +157,7 @@ object GoogleDriveManager {
                             Log.w(TAG, "Could not open inputStream for ${item.uri}")
                         }
                     }
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     Log.e(TAG, "Upload exception", e)
                     throw e
                 }

@@ -18,7 +18,7 @@ class GalleryApp : Application() {
 
     companion object {
         @Volatile
-        var msalApp : ISingleAccountPublicClientApplication? = null
+        var msalApp: ISingleAccountPublicClientApplication? = null
             private set
     }
 
@@ -31,17 +31,17 @@ class GalleryApp : Application() {
                 this,
                 R.raw.auth_config,
                 object : IPublicClientApplication.ISingleAccountApplicationCreatedListener {
-                    override fun onCreated(application : ISingleAccountPublicClientApplication) {
+                    override fun onCreated(application: ISingleAccountPublicClientApplication) {
                         msalApp = application
                     }
 
-                    override fun onError(exception : MsalException) {
+                    override fun onError(exception: MsalException) {
                         exception.printStackTrace()
                         msalApp = null
                     }
                 }
             )
-        } catch (ex : Exception) {
+        } catch (ex: Exception) {
             ex.printStackTrace()
             msalApp = null
         }

@@ -44,7 +44,7 @@
             android:exported="false"
             android:label="@string/appNameGD"
             android:theme="@style/Theme.PhotoGallery.Dark"
-            tools:replace="android:theme"/>
+            tools:replace="android:theme" />
 
         <!-- MSAL redirect receiver: handle msal{client-id}://auth -->
         <activity
