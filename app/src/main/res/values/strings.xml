@@ -2,7 +2,7 @@
 <resources>
 
     <!-- General App Tests -->
-    <string name="app_name">Call Recorder</string>
+    <string name="app_name">Photo Gallery</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
     <string name="idle">Idle</string>
@@ -45,19 +45,19 @@
     <string name="GDriveUploadUrl">https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart</string>
     <string name="GDriveSignin">Sign in to Google Drive</string>
     <string name="ODriveSignin">Sign in to MS OneDrive</string>
-    <!-- Change – (en-dash) to - (hyphen) -->
     <string name="ODClientId">msal46fe6c5f-0518-4436-a85a-8993094287a6</string>
     <string name="GDscope">https://www.googleapis.com/auth/drive.file</string>
     <string name="ODscope">Files.ReadWrite.All</string>
     <string name="token_Xchange">url</string>
-    <!-- <string name="server_token_exchange_url">url</string> -->
 
     <!-- Homescreen Tab strings -->
     <string name="tabPhotos">Photos</string>
     <string name="tabVideos">Videos</string>
-    <string name="tabMedias">Medias</string>
+    <string name="tabVault">Vault</string>
     <string name="tabSettings">Settings</string>
     <string name="tabAboutApp">About App</string>
+    <string name="tabAbout">About</string>
+    <string name="tabAdvanced">Advanced</string>
 
     <!-- Menu strings -->
     <string name="folder_list">Gallery Folders</string>
@@ -71,20 +71,17 @@
     <string name="pref_theme_pure_black">Pure Black (AMOLED)</string>
     <string name="pref_theme_description">Choose App theme</string>
 
-    <!-- Placeholder strings -->
-    <!--
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    -->
-</resources>
+    <!-- Settings more items -->
+    <string name="setting_cloud_backup">Cloud Backup</string>
+    <string name="setting_default_app">Set as Default Photos App</string>
+    <string name="setting_vault_encryption">Vault Encryption</string>
+    <string name="setting_auto_backup">Auto Backup New Media</string>
+    <string name="setting_google_drive">Google Drive</string>
+    <string name="setting_one_drive">OneDrive</string>
 
+    <!-- Advanced items -->
+    <string name="adv_root_title">System &amp; Root</string>
+    <string name="adv_notifications_title">Enhanced Notifications</string>
+    <string name="adv_storage_title">Unlimited Storage Access</string>
+    <string name="adv_deep_scan">Deep Media Scan</string>
+</resources>
