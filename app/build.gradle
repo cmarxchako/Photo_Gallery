@@ -28,11 +28,11 @@ android {
             keyAlias System.getenv("androiddebugkey")
             keyPassword System.getenv("android")}*/
         }
-        release {/*
+        release {
             storeFile file(System.getenv("HOME") + "/.android/keys/photo-gallery.jks")
             storePassword System.getenv("photo-gallery")
             keyAlias System.getenv("PhotoGallery")
-            keyPassword System.getenv("photo-gallery")}*/
+            keyPassword System.getenv("photo-gallery")
         }
     }
 
@@ -44,7 +44,7 @@ android {
             versionNameSuffix '-debug'
         }
         release {
-            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             minifyEnabled false
             applicationIdSuffix '.release'
             versionNameSuffix '-release'
