@@ -30,9 +30,10 @@ android {
         }
         release {
             storeFile file(System.getenv("HOME") + "/.android/keys/photo-gallery.jks")
-            storePassword System.getenv("photo-gallery")
-            keyAlias System.getenv("PhotoGallery")
-            keyPassword System.getenv("photo-gallery")
+            //storeFile file("${System.getProperty("user.home")}/.android/gallery.jks")
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
         }
     }
 

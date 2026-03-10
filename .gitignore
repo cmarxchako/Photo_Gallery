@@ -25,6 +25,7 @@ android_idea.log
 /gradle/gradle-daemon-jvm.properties
 *.iml
 local.properties
+private.properties
 !README.md
 error_report.zip
 
