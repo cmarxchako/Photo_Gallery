@@ -10,14 +10,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material3.Divider
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,15 +32,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.droidaio.gallery.PrefsManager
 import com.droidaio.gallery.R
 import com.droidaio.gallery.ThemeManager
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    onOpenBackupFolders: () -> Unit = {}
+) {
     val ctx = LocalContext.current
     var selectedTheme by remember { mutableStateOf(ThemeManager.getSavedTheme(ctx)) }
-    var autoBackup by remember { mutableStateOf(false) }
+    var showThemeDialog by remember { mutableStateOf(false) }
+    var showBackupDialog by remember { mutableStateOf(false) }
+    var showEncryptionDialog by remember { mutableStateOf(false) }
+    var showDevOptionsDialog by remember { mutableStateOf(false) }
+
+    var autoBackup by remember { mutableStateOf(PrefsManager.getAutoBackup(ctx)) }
+    var wifiOnly by remember { mutableStateOf(PrefsManager.getBackupWifiOnly(ctx)) }
+    var trashEnabled by remember { mutableStateOf(PrefsManager.getTrashingMode(ctx)) }
+    var encryptionType by remember { mutableStateOf(PrefsManager.getVaultEncryptionType(ctx)) }
 
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(id = R.string.tabSettings)) }) }) { padding ->
         Column(
@@ -49,71 +63,163 @@ fun SettingsScreen() {
         ) {
             // Theme Section
             SettingsSectionTitle(stringResource(id = R.string.pref_theme_title))
-            ThemeOptionRow(
-                stringResource(id = R.string.pref_theme_system),
-                selectedTheme == ThemeManager.ThemeChoice.SYSTEM
-            ) {
-                selectedTheme = ThemeManager.ThemeChoice.SYSTEM
-                ThemeManager.applyTheme(ctx, selectedTheme)
-            }
-            ThemeOptionRow(
-                stringResource(id = R.string.pref_theme_light),
-                selectedTheme == ThemeManager.ThemeChoice.LIGHT
-            ) {
-                selectedTheme = ThemeManager.ThemeChoice.LIGHT
-                ThemeManager.applyTheme(ctx, selectedTheme)
-            }
-            ThemeOptionRow(
-                stringResource(id = R.string.pref_theme_dark),
-                selectedTheme == ThemeManager.ThemeChoice.DARK
-            ) {
-                selectedTheme = ThemeManager.ThemeChoice.DARK
-                ThemeManager.applyTheme(ctx, selectedTheme)
-            }
-            ThemeOptionRow(
-                stringResource(id = R.string.pref_theme_pure_black),
-                selectedTheme == ThemeManager.ThemeChoice.BLACK
-            ) {
-                selectedTheme = ThemeManager.ThemeChoice.BLACK
-                ThemeManager.applyTheme(ctx, selectedTheme)
-            }
+            SettingsClickableRow(
+                label = "App Theme",
+                subtitle = selectedTheme.name.lowercase(Locale.ROOT).replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                },
+                onClick = { showThemeDialog = true }
+            )
 
-            Divider(modifier = Modifier.padding(vertical = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             // Cloud Backup Section
-            SettingsSectionTitle(stringResource(id = R.string.setting_cloud_backup))
+            SettingsSectionTitle("Backup")
+            SettingsClickableRow(
+                label = "Backup Settings",
+                subtitle = if (autoBackup) "Enabled" else "Disabled",
+                onClick = { showBackupDialog = true }
+            )
             SettingsClickableRow(
                 stringResource(id = R.string.setting_google_drive),
-                "Not signed in"
+                "Sign in to Google"
             ) {
-                // Trigger Google Sign-in
+                // Trigger Google Sign-in flow
             }
-            SettingsClickableRow(stringResource(id = R.string.setting_one_drive), "Not signed in") {
-                // Trigger OneDrive Sign-in
-            }
-            SettingsSwitchRow(stringResource(id = R.string.setting_auto_backup), autoBackup) {
-                autoBackup = it
+            SettingsClickableRow(stringResource(id = R.string.setting_one_drive), "Sign in to OneDrive") {
+                // Trigger OneDrive Sign-in flow
             }
 
-            Divider(modifier = Modifier.padding(vertical = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             // Vault Section
             SettingsSectionTitle(stringResource(id = R.string.tabVault))
             SettingsClickableRow(
                 stringResource(id = R.string.setting_vault_encryption),
-                "AES-256"
+                encryptionType
             ) {
-                // Manage Encryption
+                showEncryptionDialog = true
+            }
+            SettingsSwitchRow(stringResource(id = R.string.setting_enable_trash), trashEnabled) {
+                trashEnabled = it
+                PrefsManager.setTrashingMode(ctx, it)
             }
 
-            Divider(modifier = Modifier.padding(vertical = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             // General Section
             SettingsSectionTitle("General")
-            SettingsClickableRow(stringResource(id = R.string.setting_default_app), "") {
-                // Set as default
+            SettingsClickableRow(stringResource(id = R.string.setting_use_as_default), "") {
+                // Logic to set as default app
+            }
+            SettingsClickableRow(stringResource(id = R.string.export_import_data), "Export/Import config") {
+                // Implement export/import
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+            // Developer Section
+            SettingsSectionTitle(stringResource(id = R.string.developer_options))
+            SettingsClickableRow("Developer Tools", "Logcat, Reset Data") {
+                showDevOptionsDialog = true
             }
         }
+    }
+
+    if (showThemeDialog) {
+        AlertDialog(
+            onDismissRequest = { showThemeDialog = false },
+            title = { Text("Choose Theme") },
+            text = {
+                Column {
+                    ThemeOptionRow("System Default", selectedTheme == ThemeManager.ThemeChoice.SYSTEM) {
+                        selectedTheme = ThemeManager.ThemeChoice.SYSTEM
+                        ThemeManager.applyTheme(ctx, selectedTheme)
+                        showThemeDialog = false
+                    }
+                    ThemeOptionRow("Light", selectedTheme == ThemeManager.ThemeChoice.LIGHT) {
+                        selectedTheme = ThemeManager.ThemeChoice.LIGHT
+                        ThemeManager.applyTheme(ctx, selectedTheme)
+                        showThemeDialog = false
+                    }
+                    ThemeOptionRow("Dark", selectedTheme == ThemeManager.ThemeChoice.DARK) {
+                        selectedTheme = ThemeManager.ThemeChoice.DARK
+                        ThemeManager.applyTheme(ctx, selectedTheme)
+                        showThemeDialog = false
+                    }
+                    ThemeOptionRow("Pure Black", selectedTheme == ThemeManager.ThemeChoice.BLACK) {
+                        selectedTheme = ThemeManager.ThemeChoice.BLACK
+                        ThemeManager.applyTheme(ctx, selectedTheme)
+                        showThemeDialog = false
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { showThemeDialog = false }) { Text("Cancel") } }
+        )
+    }
+
+    if (showBackupDialog) {
+        AlertDialog(
+            onDismissRequest = { showBackupDialog = false },
+            title = { Text("Backup Settings") },
+            text = {
+                Column {
+                    SettingsSwitchRow(stringResource(id = R.string.setting_auto_backup), autoBackup) {
+                        autoBackup = it
+                        PrefsManager.setAutoBackup(ctx, it)
+                    }
+                    SettingsSwitchRow(stringResource(id = R.string.backup_wifi_only), wifiOnly) {
+                        wifiOnly = it
+                        PrefsManager.setBackupWifiOnly(ctx, it)
+                    }
+                    SettingsClickableRow(stringResource(id = R.string.backup_folders_title), "Manage folders") {
+                        showBackupDialog = false
+                        onOpenBackupFolders()
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { showBackupDialog = false }) { Text("Done") } }
+        )
+    }
+
+    if (showEncryptionDialog) {
+        AlertDialog(
+            onDismissRequest = { showEncryptionDialog = false },
+            title = { Text("Vault Encryption") },
+            text = {
+                Column {
+                    ThemeOptionRow("AES-256 (App Password)", encryptionType == "AES") {
+                        encryptionType = "AES"
+                        PrefsManager.setVaultEncryptionType(ctx, "AES")
+                        showEncryptionDialog = false
+                    }
+                    ThemeOptionRow("Device Lock (Biometric/PIN)", encryptionType == "DEVICE") {
+                        encryptionType = "DEVICE"
+                        PrefsManager.setVaultEncryptionType(ctx, "DEVICE")
+                        showEncryptionDialog = false
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { showEncryptionDialog = false }) { Text("Cancel") } }
+        )
+    }
+
+    if (showDevOptionsDialog) {
+        AlertDialog(
+            onDismissRequest = { showDevOptionsDialog = false },
+            title = { Text("Developer Options") },
+            text = {
+                Column {
+                    SettingsClickableRow(stringResource(id = R.string.view_logcat), "Show app logs") {
+                        // Show Logcat sub-window/activity
+                    }
+                    SettingsClickableRow(stringResource(id = R.string.reset_app_data), "Clear all settings and cache") {
+                        // Reset app data logic
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { showDevOptionsDialog = false }) { Text("Close") } }
+        )
     }
 }
 
@@ -153,7 +259,7 @@ fun SettingsClickableRow(label: String, subtitle: String, onClick: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(label, style = MaterialTheme.typography.bodyLarge)
             if (subtitle.isNotEmpty()) {
                 Text(
@@ -181,7 +287,7 @@ fun SettingsSwitchRow(label: String, checked: Boolean, onCheckedChange: (Boolean
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(label, style = MaterialTheme.typography.bodyLarge)
+        Text(label, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }

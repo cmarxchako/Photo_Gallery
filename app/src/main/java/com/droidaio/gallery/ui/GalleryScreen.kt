@@ -1,6 +1,7 @@
 package com.droidaio.gallery.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -8,8 +9,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,10 +38,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.droidaio.gallery.MainActivity
 import com.droidaio.gallery.PendingOperation
+import com.droidaio.gallery.PrefsManager
+import com.droidaio.gallery.R
 import com.droidaio.gallery.models.MediaItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -44,7 +53,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun GalleryScreen(
     onOpenBackup: () -> Unit = {},
-    onOpenSettings: () -> Unit = {},
+    onOpenTrash: () -> Unit = {},
     viewModel: GalleryViewModel = viewModel(),
     displayItems: List<MediaItem>? = null
 ) {
@@ -56,8 +65,10 @@ fun GalleryScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     var gridColumns by remember { mutableStateOf(3) }
+    var showMenu by remember { mutableStateOf(false) }
 
     val itemProgress = remember { mutableStateMapOf<Long, Int>() }
+    val trashEnabled = remember { PrefsManager.getTrashingMode(context) }
 
     LaunchedEffect(Unit) {
         AppEventBus.events.collect { ev ->
@@ -92,56 +103,94 @@ fun GalleryScreen(
 
     Scaffold(
         topBar = {
-            if (selectedIds.isNotEmpty()) {
-                SelectionTopBar(
-                    selectedCount = selectedIds.size,
-                    onClear = { viewModel.clearSelection() },
-                    onDelete = {
-                        val toDelete = viewModel.getSelectedItems()
-                        viewModel.scheduleDeleteWithUndo(toDelete)
-                    },
-                    onMove = {
-                        val toMove = viewModel.getSelectedItems()
-                        (context as? MainActivity)?.startFolderPickerForOperationWithType(
-                            PendingOperation.Type.MOVE,
-                            toMove
-                        )
-                        viewModel.clearSelection()
-                    },
-                    onCopy = {
-                        val toCopy = viewModel.getSelectedItems()
-                        (context as? MainActivity)?.startFolderPickerForOperationWithType(
-                            PendingOperation.Type.COPY,
-                            toCopy
-                        )
-                        viewModel.clearSelection()
-                    },
-                    onBackup = { viewModel.clearSelection() },
-                    onVault = { viewModel.clearSelection() }
-                )
-            } else {
-                TopAppBar(
-                    title = { Text("Gallery") },
-                    actions = {
-                        IconButton(onClick = {
-                            gridColumns =
-                                if (gridColumns == 3) 4 else if (gridColumns == 4) 2 else 3
-                        }) {
-                            Icon(Icons.Default.GridView, contentDescription = "View Mode")
-                        }
-                        IconButton(onClick = onOpenBackup) {
-                            Icon(
-                                painterResource(id = android.R.drawable.ic_menu_upload),
-                                contentDescription = "Backup"
+            Column {
+                if (selectedIds.isNotEmpty()) {
+                    SelectionTopBar(
+                        selectedCount = selectedIds.size,
+                        onClear = { viewModel.clearSelection() },
+                        onDelete = {
+                            val toDelete = viewModel.getSelectedItems()
+                            viewModel.scheduleDeleteWithUndo(toDelete)
+                        },
+                        onMove = {
+                            val toMove = viewModel.getSelectedItems()
+                            (context as? MainActivity)?.startFolderPickerForOperationWithType(
+                                PendingOperation.Type.MOVE,
+                                toMove
                             )
-                        }
-                        IconButton(onClick = onOpenSettings) {
-                            Icon(
-                                painterResource(id = android.R.drawable.ic_menu_manage),
-                                contentDescription = "Settings"
+                            viewModel.clearSelection()
+                        },
+                        onCopy = {
+                            val toCopy = viewModel.getSelectedItems()
+                            (context as? MainActivity)?.startFolderPickerForOperationWithType(
+                                PendingOperation.Type.COPY,
+                                toCopy
                             )
+                            viewModel.clearSelection()
+                        },
+                        onBackup = { viewModel.clearSelection() },
+                        onVault = { viewModel.clearSelection() }
+                    )
+                } else {
+                    TopAppBar(
+                        title = { Text("Gallery") },
+                        actions = {
+                            IconButton(onClick = { showMenu = !showMenu }) {
+                                Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                            }
+                            DropdownMenu(
+                                expanded = showMenu,
+                                onDismissRequest = { showMenu = false }
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text("Grid Size") },
+                                    onClick = {
+                                        gridColumns =
+                                            if (gridColumns == 3) 4 else if (gridColumns == 4) 2 else 3
+                                        showMenu = false
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Default.GridView,
+                                            contentDescription = null
+                                        )
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text("Backup") },
+                                    onClick = {
+                                        onOpenBackup()
+                                        showMenu = false
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            painterResource(id = android.R.drawable.ic_menu_upload),
+                                            contentDescription = null
+                                        )
+                                    }
+                                )
+                                if (trashEnabled) {
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(id = R.string.trash)) },
+                                        onClick = {
+                                            onOpenTrash()
+                                            showMenu = false
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Default.Delete,
+                                                contentDescription = null
+                                            )
+                                        }
+                                    )
+                                }
+                            }
                         }
-                    }
+                    )
+                }
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             }
         },

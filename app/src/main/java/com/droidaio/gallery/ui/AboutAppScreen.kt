@@ -1,5 +1,7 @@
 package com.droidaio.gallery.ui
 
+import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,16 +22,21 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import com.droidaio.gallery.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutAppScreen() {
+    val context = LocalContext.current
+    
     Scaffold(
         topBar = {
             TopAppBar(
@@ -61,7 +68,7 @@ fun AboutAppScreen() {
             )
 
             Text(
-                text = "v0.1.0",
+                text = context.getString(R.string.APP_VERSION),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.outline
             )
@@ -82,9 +89,7 @@ fun AboutAppScreen() {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Photo Gallery is a modern, fast, and secure way to manage your photos and videos. " +
-                                "It features cloud backup to Google Drive and OneDrive, " +
-                                "a secure vault for your private media, and a clean Material 3 interface.",
+                        text = context.getString(R.string.APP_ABOUT),
                         style = MaterialTheme.typography.bodyLarge,
                         lineHeight = 24.sp
                     )
@@ -92,6 +97,38 @@ fun AboutAppScreen() {
             }
 
             Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = stringResource(id = R.string.github_link),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier.clickable {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        context.getString(R.string.GITHUB_REPO).toUri()
+                    )
+                    context.startActivity(intent)
+                }
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = stringResource(id = R.string.license_link),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier.clickable {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        context.getString(R.string.GITHUB_LICENSE).toUri()
+                    )
+                    context.startActivity(intent)
+                }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
 
             Text(
                 text = "© 2026 AnDroid All-In-One",

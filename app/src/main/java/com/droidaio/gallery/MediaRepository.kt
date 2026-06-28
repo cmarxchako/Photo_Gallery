@@ -62,11 +62,7 @@ class MediaRepository(private val context: Context) {
         val sort = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             "${MediaStore.MediaColumns.DATE_TAKEN} DESC"
         } else {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                "${MediaStore.MediaColumns.DATE_ADDED} DESC"
-            } else {
-                "${MediaStore.MediaColumns.DATE_MODIFIED} DESC"
-            }
+            "${MediaStore.MediaColumns.DATE_ADDED} DESC"
         }
         val cursor: Cursor? =
             context.contentResolver.query(queryUri, projection, selection, null, sort)

@@ -12,7 +12,7 @@ import com.droidaio.gallery.ui.theme.PhotoGalleryTheme
 
 /**
  * Main Fragment hosting the gallery screen. Uses Compose for UI.
- * Handles navigation to backup and settings screens.
+ * Handles navigation to back up and settings screens.
  */
 class GalleryFragment : Fragment() {
 
@@ -31,8 +31,7 @@ class GalleryFragment : Fragment() {
                     darkTheme = (choice == ThemeManager.ThemeChoice.DARK || usePureBlack)
                 ) {
                     GalleryScreen(
-                        onOpenBackup = { findNavController().navigate("backup") },
-                        onOpenSettings = { findNavController().navigate("settings") }
+                        onOpenBackup = { findNavController().navigate("backup") }
                     )
                 }
             }
@@ -42,11 +41,10 @@ class GalleryFragment : Fragment() {
 
     // inside GalleryFragment
     fun refreshWithSelectedFolders() {
-        //val selectedFolderIds = PrefsManager.getSelectedFolders(requireContext())
-        //val repository = MediaRepository(requireContext())
-        //val mediaItems = repository.queryAllMedia().filter { selectedFolderIds.contains(it.bucketId) }
-        //repository.loadMediaItems(selectedFolderIds)
+        // val selectedFolderIds = PrefsManager.getSelectedFolders(requireContext())
+        // val repository = MediaRepository(requireContext())
+        // val mediaItems = repository.queryAllMedia().filter { selectedFolderIds.contains(it.bucketId) }
+        // repository.loadMediaItems(selectedFolderIds)
     }
 
 }
-

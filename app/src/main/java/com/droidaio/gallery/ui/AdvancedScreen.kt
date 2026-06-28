@@ -16,17 +16,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.droidaio.gallery.PrefsManager
 import com.droidaio.gallery.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdvancedScreen() {
+    val ctx = LocalContext.current
     var rootEnabled by remember { mutableStateOf(false) }
     var unlimitedStorage by remember { mutableStateOf(false) }
     var enhancedNotifications by remember { mutableStateOf(false) }
     var deepScan by remember { mutableStateOf(false) }
+    var trashingMode by remember { mutableStateOf(PrefsManager.getTrashingMode(ctx)) }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Advanced Options") }) }
@@ -38,6 +42,18 @@ fun AdvancedScreen() {
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
+            SettingsSectionTitle("Deletion")
+            SettingsSwitchRow(
+                label = "Trashing Mode",
+                checked = trashingMode,
+                onCheckedChange = {
+                    trashingMode = it
+                    PrefsManager.setTrashingMode(ctx, it)
+                }
+            )
+
+            Divider(modifier = Modifier.padding(vertical = 16.dp))
+
             SettingsSectionTitle("System & Root")
             SettingsSwitchRow(
                 label = stringResource(id = R.string.enableRoot),

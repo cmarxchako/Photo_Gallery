@@ -13,6 +13,8 @@ object Destinations {
     const val HISTORY = "history"
     const val SETTINGS = "settings"
     const val ABOUT = "about"
+    const val BACKUP_FOLDERS = "backup_folders"
+    const val TRASH = "trash"
 }
 
 @Composable
@@ -21,9 +23,10 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Destinations.MAIN) {
             MediaTabsScreen(
                 onOpenBackup = { navController.navigate(Destinations.BACKUP) },
-                onOpenSettings = { navController.navigate(Destinations.SETTINGS) },
+                onOpenHistory = { navController.navigate(Destinations.HISTORY) },
                 onOpenAbout = { navController.navigate(Destinations.ABOUT) },
-                onOpenHistory = { navController.navigate(Destinations.HISTORY) }
+                onOpenTrash = { navController.navigate(Destinations.TRASH) },
+                onOpenBackupFolders = { navController.navigate(Destinations.BACKUP_FOLDERS) }
             )
         }
         composable(Destinations.BACKUP) { BackupScreen() }
@@ -33,7 +36,17 @@ fun AppNavGraph(navController: NavHostController) {
                 activity?.cancelScheduledOp(opId)
             })
         }
-        composable(Destinations.SETTINGS) { SettingsScreen() }
+        composable(Destinations.SETTINGS) {
+            SettingsScreen(
+                onOpenBackupFolders = { navController.navigate(Destinations.BACKUP_FOLDERS) }
+            )
+        }
         composable(Destinations.ABOUT) { AboutAppScreen() }
+        composable(Destinations.BACKUP_FOLDERS) {
+            BackupFoldersScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Destinations.TRASH) {
+            TrashScreen(onBack = { navController.popBackStack() })
+        }
     }
 }

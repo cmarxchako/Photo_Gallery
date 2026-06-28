@@ -3,11 +3,11 @@ buildscript {
     ext {
         agp_version = '8.13.2'
         compose_bom = '2024.02.00' //2023.04.00
-        compose_version = '1.2.0'  // kept for compatibility; module uses BOM where possible
-        glide_version = '4.11.0' //4.15.1
+        compose_version = '1.2.0'  // kept for compatibility
+        glide_version = '4.15.1' //4.11.0
         kotlin_version = '1.8.21' //1.7.0
-        lifecycle = '2.3.1' // 2.6.1
-        retrofit_version = '2.7.1' //2.9.0
+        lifecycle = '2.6.1' // 2.3.1
+        retrofit_version = '2.9.0' //2.7.1
     }
 }
 
