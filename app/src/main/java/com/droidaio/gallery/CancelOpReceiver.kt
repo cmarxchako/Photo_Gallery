@@ -6,7 +6,7 @@ import android.content.Intent
 import androidx.work.WorkManager
 import com.droidaio.gallery.OperationWorker.Companion.EXTRA_OP_ID
 import com.droidaio.gallery.ui.AppEventBus
-import java.util.UUID
+import java.util.*
 
 /**
  * BroadcastReceiver invoked by the notification Cancel action.

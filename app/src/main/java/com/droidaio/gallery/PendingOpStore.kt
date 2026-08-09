@@ -3,7 +3,7 @@ package com.droidaio.gallery
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.UUID
+import java.util.*
 
 /**
  *  Simple SharedPreferences-backed store for PendingOperation list.

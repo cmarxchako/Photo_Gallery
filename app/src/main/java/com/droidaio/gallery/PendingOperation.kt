@@ -1,7 +1,7 @@
 package com.droidaio.gallery
 
 import java.io.Serializable
-import java.util.UUID
+import java.util.*
 
 /**
  * Represents a persisted pending operation (copy/move/delete).

@@ -2,7 +2,7 @@ package com.droidaio.gallery.ui
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import java.util.UUID
+import java.util.*
 
 /**
  * App-wide UI event bus. Compose collects events and shows
