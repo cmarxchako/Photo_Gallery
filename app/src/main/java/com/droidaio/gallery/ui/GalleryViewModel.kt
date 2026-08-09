@@ -3,8 +3,9 @@ package com.droidaio.gallery.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.droidaio.gallery.MediaRepository
+import com.droidaio.gallery.data.MediaRepository
 import com.droidaio.gallery.models.MediaItem
+import com.droidaio.gallery.utils.FileOperations
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

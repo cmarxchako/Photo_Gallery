@@ -17,10 +17,14 @@ import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.droidaio.gallery.data.PendingOpStore
 import com.droidaio.gallery.models.MediaItem
+import com.droidaio.gallery.models.PendingOperation
+import com.droidaio.gallery.service.OperationWorker
 import com.droidaio.gallery.ui.AppEventBus
 import com.droidaio.gallery.ui.AppNavGraph
 import com.droidaio.gallery.ui.theme.PhotoGalleryTheme
+import com.droidaio.gallery.utils.ThemeManager
 import com.google.android.material.color.DynamicColors
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope

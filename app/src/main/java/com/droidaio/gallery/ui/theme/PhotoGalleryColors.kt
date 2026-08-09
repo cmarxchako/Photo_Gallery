@@ -32,6 +32,33 @@ val Pink40 = Color(0xFF7D5260)
 
 /*
 package com.droidaio.gallery.ui.theme
+import com.droidaio.gallery.GalleryApp
+import com.droidaio.gallery.ui.screens.BackupFoldersScreen
+import com.droidaio.gallery.ui.screens.UndoHistoryScreen
+import com.droidaio.gallery.ui.screens.TrashScreen
+import com.droidaio.gallery.ui.screens.AdvancedScreen
+import com.droidaio.gallery.ui.screens.AboutAppScreen
+import com.droidaio.gallery.ui.screens.SettingsScreen
+import com.droidaio.gallery.ui.screens.VaultScreen
+import com.droidaio.gallery.ui.screens.BackupScreen
+import com.droidaio.gallery.ui.screens.MediaTabsScreen
+import com.droidaio.gallery.ui.AppEventBus
+import com.droidaio.gallery.service.OperationWorker
+import com.droidaio.gallery.utils.FileOperations
+import com.droidaio.gallery.utils.PrefsManager
+import com.droidaio.gallery.utils.ThemeManager
+import com.droidaio.gallery.data.OneDriveManager
+import com.droidaio.gallery.data.GoogleDriveManager
+import com.droidaio.gallery.data.TokenStore
+import com.droidaio.gallery.data.PendingOpStore
+import com.droidaio.gallery.data.MediaRepository
+import com.droidaio.gallery.data.BackupManager
+import com.droidaio.gallery.data.VaultManager
+import com.droidaio.gallery.models.PendingOperation
+import com.droidaio.gallery.models.VaultFile
+import com.droidaio.gallery.ui.GalleryViewModel
+import com.droidaio.gallery.models.MediaItem
+import com.droidaio.gallery.R
 
 import androidx.compose.ui.graphics.Color
 

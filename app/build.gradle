@@ -1,97 +1,139 @@
+// Project configuration file.
 plugins {
+    //id 'java'
     //id 'kotlin-kapt'
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    /**** Upgrade ****/
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.android.application)
+
 }
-
 android {
-    namespace 'com.droidaio.gallery'
-    //noinspection GradleDependency
-    compileSdkVersion 34
-
+    namespace = 'com.droidaio.gallery'
+    compileSdkVersion rootProject["compSdkVer"]
     defaultConfig {
-        applicationId "com.droidaio.gallery"
-        minSdkVersion 23
-        //noinspection OldTargetApi
-        targetSdkVersion 34
-        versionCode 10180226
-        versionName "0.1.0.18.022026"
-
-        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId = "com.droidaio.gallery"
+        minSdkVersion rootProject["minSdkVer"]
+        targetSdkVersion rootProject["tarSdkVer"]
+        versionCode 10260809
+        versionName "0.1.0.20260809"
         vectorDrawables { useSupportLibrary = true }
+        multiDexEnabled = false
+        buildConfigField("int", "TARGET_SDK", "${targetSdk}")
+        buildConfigField("int", "MIN_SDK", "${minSdk}")
+        buildConfigField("int", "COMPILE_SDK", "${rootProject["compSdkVer"]}")
+        buildConfigField("String", "AUTHOR", "${rootProject["author1"]}")
+        buildConfigField("String", "AUTHORS", "${rootProject["author2"]}")
+        buildConfigField("String", "DEVELOPER", "${rootProject["developer"]}")
+        buildConfigField("String", "APPLICATION_NAME", "${rootProject["appname"]}")
+        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     signingConfigs {
-        debug {/*
-            storeFile file(System.getenv("HOME") + "/.android/debug.keystore")
-            storePassword System.getenv("android")
-            keyAlias System.getenv("androiddebugkey")
-            keyPassword System.getenv("android")}*/
+        debug {
+            storeFile rootProject.keyStoreFile
+            keyAlias rootProject.debugAlias
+            keyPassword rootProject.debugPassword
+            storePassword rootProject.debugStore
         }
         release {
-            storeFile file(System.getenv("HOME") + "/.android/keys/photo-gallery.jks")
-            //storeFile file("${System.getProperty("user.home")}/.android/gallery.jks")
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
+            storeFile rootProject.keyStoreFile
+            keyAlias rootProject.releaseAlias
+            keyPassword rootProject.releasePassword
+            storePassword rootProject.releaseStore
         }
     }
-
     buildTypes {
         debug {
-            //signingConfig signingConfigs.debug
-            minifyEnabled false
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-debug'
+            signingConfig = signingConfigs.debug
+            minifyEnabled = false
+            applicationIdSuffix = '.debug'
+            versionNameSuffix = '-debug'
         }
         release {
-            signingConfig signingConfigs.release
-            minifyEnabled false
-            applicationIdSuffix '.release'
-            versionNameSuffix '-release'
+            isDefault = true
+            signingConfig = signingConfigs.release
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         compose = true
+        buildConfig = true
         viewBinding = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "$compose_version" //1.4.7
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
     packagingOptions {
         resources { excludes += '/META-INF/{AL2.0,LGPL2.1}' }
     }
-    //ndkVersion ndkTools
-    //buildToolsVersion buildTools
 }
-
 dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.window.size)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.gson)
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.documentfile)
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.material)
+    implementation(libs.glide)
+    //ksp(libs.glide.compiler)
+    implementation(libs.play.services.auth)
+    implementation(libs.okhttp)
+    implementation(libs.okio)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.scalars)
+    implementation(libs.msal)
+    implementation(libs.kotlinx.coroutines.android)
+    /*
+     * Android Tests Disabled --->
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+     */
 
+    /*
+     * Upgrade. Version Cataloging. --->
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"
     implementation 'androidx.activity:activity-compose:1.3.1' //1.8.0
     implementation platform("androidx.compose:compose-bom:$compose_bom")
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation "androidx.compose.material3:material3:$compose_version"
-    implementation "androidx.compose.material3:material3-window-size-class:$compose_version"
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.ui:ui-tooling-preview"
+    implementation "androidx.compose.material3:material3"
+    implementation "androidx.compose.material3:material3-window-size-class"
+    implementation "androidx.compose.material:material-icons-extended"
     implementation 'androidx.navigation:navigation-compose:2.7.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
-    implementation 'io.coil-kt:coil-compose:2.0.0' //2.4.0
-    implementation 'com.google.code.gson:gson:2.9.1' //2.10.1
-    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.23.0' //0.31.5-beta
+    implementation 'io.coil-kt:coil-compose:2.4.0' //2.0.0
+    implementation 'com.google.code.gson:gson:2.10.1' //2.9.1
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.31.5-beta' //0.23.0
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3' //2.1.4
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4' //2.1.3
     implementation 'androidx.recyclerview:recyclerview:1.3.0'
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
     implementation 'androidx.documentfile:documentfile:1.0.1'
@@ -99,18 +141,19 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0' //1.2.1
     //kapt "com.github.bumptech.glide:compiler:$glide_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
-    implementation 'com.google.android.gms:play-services-auth:19.0.0' //20.5.0
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1' //4.11.0
-    implementation 'com.squareup.okio:okio:3.0.0' //3.5.0
+    implementation 'com.google.android.gms:play-services-auth:20.5.0' //19.0.0
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0' //4.9.1
+    implementation 'com.squareup.okio:okio:3.5.0' //3.0.0
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
     implementation 'com.microsoft.identity.client:msal:6.2.0' //8.2.1
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1' //1.7.1
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1' //1.4.1
     //debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     //debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     //testImplementation 'junit:junit:4.13.2'
     //androidTestImplementation 'androidx.test.ext:junit:1.1.3' //1.3.0'
     //androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
     //androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    */
 }
 

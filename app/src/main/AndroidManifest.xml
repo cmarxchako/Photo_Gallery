@@ -76,7 +76,7 @@
         </provider>
 
         <receiver
-            android:name="com.droidaio.gallery.CancelOpReceiver"
+            android:name="com.droidaio.gallery.service.CancelOpReceiver"
             android:exported="false"
             tools:ignore="ExportedReceiver" />
     </application>

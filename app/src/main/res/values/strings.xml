@@ -2,7 +2,7 @@
 <resources>
 
     <!-- General App Tests -->
-    <string name="app_name">Call Recorder</string>
+    <string name="app_name">Photo Gallery</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
     <string name="idle">Idle</string>
@@ -45,19 +45,19 @@
     <string name="GDriveUploadUrl">https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart</string>
     <string name="GDriveSignin">Sign in to Google Drive</string>
     <string name="ODriveSignin">Sign in to MS OneDrive</string>
-    <!-- Change – (en-dash) to - (hyphen) -->
     <string name="ODClientId">msal46fe6c5f-0518-4436-a85a-8993094287a6</string>
     <string name="GDscope">https://www.googleapis.com/auth/drive.file</string>
     <string name="ODscope">Files.ReadWrite.All</string>
     <string name="token_Xchange">url</string>
-    <!-- <string name="server_token_exchange_url">url</string> -->
 
     <!-- Homescreen Tab strings -->
     <string name="tabPhotos">Photos</string>
     <string name="tabVideos">Videos</string>
-    <string name="tabMedias">Medias</string>
+    <string name="tabVault">Vault</string>
     <string name="tabSettings">Settings</string>
     <string name="tabAboutApp">About App</string>
+    <string name="tabAbout">About</string>
+    <string name="tabAdvanced">Advanced</string>
 
     <!-- Menu strings -->
     <string name="folder_list">Gallery Folders</string>
@@ -71,20 +71,34 @@
     <string name="pref_theme_pure_black">Pure Black (AMOLED)</string>
     <string name="pref_theme_description">Choose App theme</string>
 
-    <!-- Placeholder strings -->
-    <!--
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    -->
-</resources>
+    <!-- Settings more items -->
+    <string name="setting_cloud_backup">Cloud Backup</string>
+    <string name="setting_use_as_default">Use as default</string>
+    <string name="setting_vault_encryption">Vault Encryption</string>
+    <string name="setting_auto_backup">Auto Backup New Media</string>
+    <string name="setting_google_drive">Google Drive</string>
+    <string name="setting_one_drive">OneDrive</string>
+    <string name="setting_enable_trash">Enable Trash</string>
+    <string name="trash">Trash</string>
+    <string name="backup_wifi_only">Backup on Wi-Fi Only</string>
+    <string name="export_import_data">Export/Import App Data</string>
+    <string name="developer_options">Developer Options</string>
+    <string name="view_logcat">View Logcat</string>
+    <string name="reset_app_data">Reset App Data</string>
+    <string name="github_link">GitHub Repository</string>
+    <string name="license_link">License</string>
+    <string name="backup_folders_title">Backup Folders</string>
+    <string name="APP_VERSION">0.1.0.10.032026 (10100326)</string>
+    <string name="APP_ABOUT">
+        Photo Gallery is a modern, fast, and secure way to manage your photos and videos.
+        It features cloud backup to Google Drive and OneDrive,
+        a secure vault for your private media, and a clean Material 3 interface.</string>
 
+    <!-- Advanced items -->
+    <string name="adv_root_title">System &amp; Root</string>
+    <string name="adv_notifications_title">Enhanced Notifications</string>
+    <string name="adv_storage_title">Unlimited Storage Access</string>
+    <string name="adv_deep_scan">Deep Media Scan</string>
+    <string name="GITHUB_REPO">https://github.com/cmarxchako/Photo_Gallery</string>
+    <string name="GITHUB_LICENSE">https://github.com/cmarxchako/Photo_Gallery/blob/main/LICENSE</string>
+</resources>
