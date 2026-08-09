@@ -13,9 +13,9 @@ android {
         applicationId "com.droidaio.gallery"
         minSdkVersion 23
         //noinspection OldTargetApi
-        targetSdkVersion 34
-        versionCode 10180226
-        versionName "0.1.0.18.022026"
+        targetSdkVersion 33
+        versionCode 10260218
+        versionName "0.1.0.20260218"
 
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
