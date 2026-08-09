@@ -13,19 +13,15 @@ import androidx.recyclerview.widget.RecyclerView
 
 class SettingsFragment : Fragment() {
 
-    private lateinit var recycler: RecyclerView
+    private lateinit var recycler : RecyclerView
     private val options = listOf(
         ThemeManager.ThemeChoice.SYSTEM to getStringSafe(R.string.pref_theme_system),
         ThemeManager.ThemeChoice.LIGHT to getStringSafe(R.string.pref_theme_light),
         ThemeManager.ThemeChoice.DARK to getStringSafe(R.string.pref_theme_dark),
-        ThemeManager.ThemeChoice.BLACK to getStringSafe(R.string.pref_theme_pure_black)
+        ThemeManager.ThemeChoice.PURE_BLACK to getStringSafe(R.string.pref_theme_pure_black)
     )
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState : Bundle?) : View {
         val root = inflater.inflate(R.layout.fragment_settings, container, false)
         recycler = root.findViewById(R.id.themeOptionsRecycler)
         recycler.layoutManager = LinearLayoutManager(requireContext())
@@ -33,10 +29,10 @@ class SettingsFragment : Fragment() {
         return root
     }
 
-    private fun getStringSafe(id: Int): String {
+    private fun getStringSafe(id : Int) : String {
         return try {
             getString(id)
-        } catch (e: Exception) {
+        } catch (e : Exception) {
             id.toString()
         }
     }
@@ -44,18 +40,18 @@ class SettingsFragment : Fragment() {
     inner class ThemeAdapter : RecyclerView.Adapter<ThemeAdapter.VH>() {
         private var selected = ThemeManager.getSavedTheme(requireContext())
 
-        inner class VH(view: View) : RecyclerView.ViewHolder(view) {
-            val label: TextView = view.findViewById(R.id.label)
-            val radio: RadioButton = view.findViewById(R.id.radio)
+        inner class VH(view : View) : RecyclerView.ViewHolder(view) {
+            val label : TextView = view.findViewById(R.id.label)
+            val radio : RadioButton = view.findViewById(R.id.radio)
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : VH {
             val v = layoutInflater.inflate(R.layout.item_theme_option, parent, false)
             return VH(v)
         }
 
         @SuppressLint("NotifyDataSetChanged")
-        override fun onBindViewHolder(holder: VH, position: Int) {
+        override fun onBindViewHolder(holder : VH, position : Int) {
             val (choice, labelText) = options[position]
             holder.label.text = labelText
             holder.radio.isChecked = (choice == selected)
@@ -63,7 +59,7 @@ class SettingsFragment : Fragment() {
                 selected = choice
                 ThemeManager.applyTheme(requireContext(), choice)
                 // If PureBlack selected, set Activity theme explicitly and recreate to apply
-                if (choice == ThemeManager.ThemeChoice.BLACK) {
+                if (choice == ThemeManager.ThemeChoice.PURE_BLACK) {
                     requireActivity().setTheme(R.style.Theme_PhotoGallery_PureBlack)
                 } else {
                     // ensure default theme is used (Theme.Gallery)
@@ -77,7 +73,7 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        override fun getItemCount(): Int = options.size
+        override fun getItemCount() : Int = options.size
     }
 }
 

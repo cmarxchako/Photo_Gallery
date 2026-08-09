@@ -17,17 +17,17 @@ import java.util.UUID
  * - maxAttempts: max retry attempts before giving up (default 3)
  */
 data class PendingOperation(
-    val id: UUID = UUID.randomUUID(),
-    val type: Type,
-    val itemIds: List<Long> = emptyList(),
-    val itemUris: List<String> = emptyList(),
-    val itemNames: List<String> = emptyList(),
-    val targetTreeUri: String? = null,
-    val createdAt: Long = System.currentTimeMillis(),
-    var status: Status = Status.PENDING,
-    var message: String? = null,
-    var attempts: Int = 0,
-    val maxAttempts: Int = 3,
+    val id : UUID = UUID.randomUUID(),
+    val type : Type,
+    val itemIds : List<Long> = emptyList(),
+    val itemUris : List<String> = emptyList(),
+    val itemNames : List<String> = emptyList(),
+    val targetTreeUri : String? = null,
+    val createdAt : Long = System.currentTimeMillis(),
+    var status : Status = Status.PENDING,
+    var message : String? = null,
+    var attempts : Int = 0,
+    val maxAttempts : Int = 3,
 ) : Serializable {
     enum class Type { COPY, MOVE, DELETE }
     enum class Status { PENDING, SCHEDULED, COMPLETED, CANCELLED, FAILED }

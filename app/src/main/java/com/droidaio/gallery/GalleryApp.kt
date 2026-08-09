@@ -6,20 +6,14 @@ import com.microsoft.identity.client.ISingleAccountPublicClientApplication
 import com.microsoft.identity.client.PublicClientApplication
 import com.microsoft.identity.client.exception.MsalException
 
-/**
- * The main Application class for the Gallery app. This class is responsible for initializing the MSAL
- * public client application instance that will be used for authentication throughout the app. The MSAL
- * instance is created asynchronously using the configuration specified in the auth_config.json file located
- * in the res/raw directory. The instance is stored in a companion object to allow easy access from other
- * parts of the app. If the initialization fails, the MSAL instance will be set to null, and any errors
- * will be printed to the console for debugging purposes.
- */
 class GalleryApp : Application() {
 
     companion object {
         @Volatile
-        var msalApp: ISingleAccountPublicClientApplication? = null
+        var msalApp : ISingleAccountPublicClientApplication? = null
             private set
+
+        fun getMsalApp() : ISingleAccountPublicClientApplication? = msalApp
     }
 
     override fun onCreate() {
@@ -31,17 +25,21 @@ class GalleryApp : Application() {
                 this,
                 R.raw.auth_config,
                 object : IPublicClientApplication.ISingleAccountApplicationCreatedListener {
-                    override fun onCreated(application: ISingleAccountPublicClientApplication) {
+                    /*fun onCreated(application : PublicClientApplication) {
+                        msalApp = application
+                    }*/
+
+                    override fun onCreated(application : ISingleAccountPublicClientApplication) {
                         msalApp = application
                     }
 
-                    override fun onError(exception: MsalException) {
+                    override fun onError(exception : MsalException) {
                         exception.printStackTrace()
                         msalApp = null
                     }
                 }
             )
-        } catch (ex: Exception) {
+        } catch (ex : Exception) {
             ex.printStackTrace()
             msalApp = null
         }

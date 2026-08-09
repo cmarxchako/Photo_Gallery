@@ -1,7 +1,6 @@
 ################################################
 # Github.gitignore
-**/databinding/
-app/.cxx/
+app/.cxx
 app/src/androidTest/
 app/src/debug/
 #app/src/main/
@@ -15,29 +14,33 @@ captures/
 .tmp/
 .temp/
 *.aab
-android_idea.log
-build_error.log
 *.apk
 !.idea/compiler.xml
 !.idea/gradle.xml
 #!.idea/misc.xml
 !.idea/workspace.xml
 .DS_Store
-/gradle/gradle-daemon-jvm.properties
 *.iml
 local.properties
-private.properties
 !README.md
-error_report.zip
 
 ################################################
 # Android.gitignore
+build/
+captures/
 .cxx/
+.externalNativeBuild/
+.gradle/
+.idea/
+*.aab
+*.apk
 deploymentTargetDropDown.xml
 google-services.json
 *.hprof
+*.iml
 *.jks
 *.keystore
+local.properties
 *.log
 misc.xml
 output-metadata.json

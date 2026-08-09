@@ -8,32 +8,29 @@ import androidx.navigation.compose.composable
 import com.droidaio.gallery.MainActivity
 
 object Destinations {
-    const val MAIN = "main"
+    const val GALLERY = "gallery"
     const val BACKUP = "backup"
     const val HISTORY = "history"
     const val SETTINGS = "settings"
-    const val ABOUT = "about"
 }
 
 @Composable
-fun AppNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Destinations.MAIN) {
-        composable(Destinations.MAIN) {
-            MediaTabsScreen(
-                onOpenBackup = { navController.navigate(Destinations.BACKUP) },
-                onOpenSettings = { navController.navigate(Destinations.SETTINGS) },
-                onOpenAbout = { navController.navigate(Destinations.ABOUT) },
-                onOpenHistory = { navController.navigate(Destinations.HISTORY) }
-            )
+fun AppNavGraph(navController : NavHostController) {
+    NavHost(navController = navController, startDestination = Destinations.GALLERY) {
+        composable("gallery") {
+            GalleryScreen(
+                onOpenBackup = { navController.navigate(Destinations.BACKUP); navController.navigate(Destinations.HISTORY) },
+                onOpenSettings = { navController.navigate(Destinations.SETTINGS) })
         }
-        composable(Destinations.BACKUP) { BackupScreen() }
+        composable("backup") { BackupScreen() }
+        //composable("history") { UndoHistoryScreen { LocalContext.current as MainActivity } }
         composable(Destinations.HISTORY) {
             val activity = LocalContext.current as? MainActivity
             UndoHistoryScreen(onCancel = { opId ->
                 activity?.cancelScheduledOp(opId)
             })
         }
-        composable(Destinations.SETTINGS) { SettingsScreen() }
-        composable(Destinations.ABOUT) { AboutAppScreen() }
+        composable("settings") { SettingsScreen() }
     }
 }
+
