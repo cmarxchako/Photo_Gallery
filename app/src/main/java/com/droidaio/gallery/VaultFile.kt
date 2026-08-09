@@ -12,14 +12,14 @@ import java.io.File
  * - toFile convenient accessor for the underlying File.
  */
 data class VaultFile(
-    val name : String,
-    val filePath : String,
-    val uri : Uri? = null,
+    val name: String,
+    val filePath: String,
+    val uri: Uri? = null,
 ) {
 
-    fun delete(context : Context) {
+    fun delete(context: Context) {
         VaultManager.deleteVaultFile(context, this)
     }
 
-    fun toFile() : File = File(filePath)
+    fun toFile(): File = File(filePath)
 }

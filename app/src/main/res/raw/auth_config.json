@@ -1,16 +1,16 @@
 {
-	"client_id":"46fe6c5f-0518-4436-a85a-8993094287a6",
-	"authorization_user_agent":"DEFAULT",
-	"redirect_uri":"msal46fe6c5f-0518-4436-a85a-8993094287a6://auth",
-	"account_mode":"SINGLE",
-	"broker_redirect_uri_registered":false,
-	"authorities":[
-		{
-			"type":"AAD",
-			"audience":{
-				"type":"AzureADandPersonalMicrosoftAccount"
-			}
-		}
-	]
+  "client_id": "46fe6c5f-0518-4436-a85a-8993094287a6",
+  "authorization_user_agent": "DEFAULT",
+  "redirect_uri": "msal46fe6c5f-0518-4436-a85a-8993094287a6://auth",
+  "account_mode": "SINGLE",
+  "broker_redirect_uri_registered": false,
+  "authorities": [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADandPersonalMicrosoftAccount"
+      }
+    }
+  ]
 }
 

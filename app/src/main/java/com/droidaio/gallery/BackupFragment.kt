@@ -21,17 +21,17 @@ import kotlinx.coroutines.launch
 @Suppress("DEPRECATION")
 class BackupFragment : Fragment() {
 
-    private var _binding : FragmentBackupBinding? = null
+    private var _binding: FragmentBackupBinding? = null
     private val binding get() = _binding!!
-    private var itemsToBackup : List<MediaItem> = emptyList()
+    private var itemsToBackup: List<MediaItem> = emptyList()
 
     // Replace with your server endpoint that exchanges serverAuthCode for refresh token and returns an optional access token
-    private val serverExchangeUrl : String by lazy {
+    private val serverExchangeUrl: String by lazy {
         // Use a string resource or BuildConfig in production; placeholder below
         getString(R.string.token_Xchange)
     }
 
-    override fun onCreate(savedInstanceState : Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             @Suppress("UNCHECKED_CAST")
@@ -40,12 +40,16 @@ class BackupFragment : Fragment() {
         OneDriveManager.init(requireContext())
     }
 
-    override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState : Bundle?) : View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentBackupBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.googleDriveButton.setOnClickListener {
             startGoogleSignIn()
         }
@@ -57,14 +61,18 @@ class BackupFragment : Fragment() {
         binding.backupAllButton.setOnClickListener {
             lifecycleScope.launch {
                 // Prefer Google if signed in and token available
-                val googleAccount = GoogleDriveManager.getSignedInAccount(requireContext())
+                GoogleDriveManager.getSignedInAccount(requireContext())
                 val googleToken = TokenStore.getGoogleToken(requireContext())
                 if (googleToken != null) {
                     performGoogleBackup()
                 } else if (OneDriveManager.isSignedIn()) {
                     performOneDriveBackup()
                 } else {
-                    DialogHelper.showInfo(requireContext(), "No Account", "Please sign in to Google Drive or OneDrive first.")
+                    DialogHelper.showInfo(
+                        requireContext(),
+                        "No Account",
+                        "Please sign in to Google Drive or OneDrive first."
+                    )
                 }
             }
         }
@@ -74,8 +82,12 @@ class BackupFragment : Fragment() {
         try {
             val intent = GoogleDriveManager.getSignInIntent(requireActivity())
             startActivityForResult(intent, REQ_GOOGLE_SIGNIN)
-        } catch (e : Exception) {
-            DialogHelper.showRetryDialog(requireContext(), "Sign-in Error", "Unable to start Google sign-in: ${e.localizedMessage}") {
+        } catch (e: Exception) {
+            DialogHelper.showRetryDialog(
+                requireContext(),
+                "Sign-in Error",
+                "Unable to start Google sign-in: ${e.localizedMessage}"
+            ) {
                 startGoogleSignIn()
             }
         }
@@ -83,15 +95,23 @@ class BackupFragment : Fragment() {
 
     private fun startOneDriveSignIn() {
         OneDriveManager.acquireTokenInteractive(requireActivity(), object : AuthenticationCallback {
-            override fun onSuccess(authenticationResult : IAuthenticationResult) {
+            override fun onSuccess(authenticationResult: IAuthenticationResult) {
                 requireActivity().runOnUiThread {
-                    DialogHelper.showInfo(requireContext(), "Signed In", "OneDrive sign-in successful.")
+                    DialogHelper.showInfo(
+                        requireContext(),
+                        "Signed In",
+                        "OneDrive sign-in successful."
+                    )
                 }
             }
 
-            override fun onError(exception : MsalException?) {
+            override fun onError(exception: MsalException?) {
                 requireActivity().runOnUiThread {
-                    DialogHelper.showRetryDialog(requireContext(), "Sign-in Error", "OneDrive sign-in failed: ${exception?.localizedMessage}") {
+                    DialogHelper.showRetryDialog(
+                        requireContext(),
+                        "Sign-in Error",
+                        "OneDrive sign-in failed: ${exception?.localizedMessage}"
+                    ) {
                         startOneDriveSignIn()
                     }
                 }
@@ -99,44 +119,75 @@ class BackupFragment : Fragment() {
 
             override fun onCancel() {
                 requireActivity().runOnUiThread {
-                    DialogHelper.showInfo(requireContext(), "Cancelled", "OneDrive sign-in cancelled.")
+                    DialogHelper.showInfo(
+                        requireContext(),
+                        "Cancelled",
+                        "OneDrive sign-in cancelled."
+                    )
                 }
             }
         })
     }
 
     @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_GOOGLE_SIGNIN) {
             if (resultCode == Activity.RESULT_OK && data != null) {
-                val task = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(data)
+                val task =
+                    com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(
+                        data
+                    )
                 try {
                     val account = task.getResult(ApiException::class.java)
                     handleGoogleSignInSuccess(account)
-                } catch (e : ApiException) {
-                    DialogHelper.showRetryDialog(requireContext(), "Sign-in Error", "Google sign-in failed: ${e.statusCode} ${e.localizedMessage}") {
+                } catch (e: ApiException) {
+                    DialogHelper.showRetryDialog(
+                        requireContext(),
+                        "Sign-in Error",
+                        "Google sign-in failed: ${e.statusCode} ${e.localizedMessage}"
+                    ) {
                         startGoogleSignIn()
                     }
                 }
             } else {
-                DialogHelper.showInfo(requireContext(), "Sign-in Cancelled", "Google sign-in was cancelled.")
+                DialogHelper.showInfo(
+                    requireContext(),
+                    "Sign-in Cancelled",
+                    "Google sign-in was cancelled."
+                )
             }
         }
     }
 
-    private fun handleGoogleSignInSuccess(account : GoogleSignInAccount?) {
+    private fun handleGoogleSignInSuccess(account: GoogleSignInAccount?) {
         if (account == null) {
-            DialogHelper.showInfo(requireContext(), "Sign-in Error", "Google sign-in returned no account.")
+            DialogHelper.showInfo(
+                requireContext(),
+                "Sign-in Error",
+                "Google sign-in returned no account."
+            )
             return
         }
         lifecycleScope.launch {
             try {
                 showProgress("Exchanging auth code with server")
-                GoogleDriveManager.onSignInSuccessAndExchange(requireContext(), account, serverExchangeUrl)
-                DialogHelper.showInfo(requireContext(), "Signed In", "Google Drive sign-in successful. Server exchange completed.")
-            } catch (e : Exception) {
-                DialogHelper.showRetryDialog(requireContext(), "Token Exchange Failed", "Failed to exchange auth code with server: ${e.localizedMessage}") {
+                GoogleDriveManager.onSignInSuccessAndExchange(
+                    requireContext(),
+                    account,
+                    serverExchangeUrl
+                )
+                DialogHelper.showInfo(
+                    requireContext(),
+                    "Signed In",
+                    "Google Drive sign-in successful. Server exchange completed."
+                )
+            } catch (e: Exception) {
+                DialogHelper.showRetryDialog(
+                    requireContext(),
+                    "Token Exchange Failed",
+                    "Failed to exchange auth code with server: ${e.localizedMessage}"
+                ) {
                     handleGoogleSignInSuccess(account)
                 }
             } finally {
@@ -150,9 +201,17 @@ class BackupFragment : Fragment() {
             try {
                 showProgress("Uploading to Google Drive")
                 BackupManager.backupToGoogleDrive(requireContext(), itemsToBackup)
-                DialogHelper.showInfo(requireContext(), "Backup Complete", "Files uploaded to Google Drive.")
-            } catch (e : Exception) {
-                DialogHelper.showRetryDialog(requireContext(), "Upload Error", "Google Drive upload failed: ${e.localizedMessage}") {
+                DialogHelper.showInfo(
+                    requireContext(),
+                    "Backup Complete",
+                    "Files uploaded to Google Drive."
+                )
+            } catch (e: Exception) {
+                DialogHelper.showRetryDialog(
+                    requireContext(),
+                    "Upload Error",
+                    "Google Drive upload failed: ${e.localizedMessage}"
+                ) {
                     performGoogleBackup()
                 }
             } finally {
@@ -166,9 +225,17 @@ class BackupFragment : Fragment() {
             try {
                 showProgress("Uploading to OneDrive")
                 BackupManager.backupToOneDrive(requireContext(), itemsToBackup)
-                DialogHelper.showInfo(requireContext(), "Backup Complete", "Files uploaded to OneDrive.")
-            } catch (e : Exception) {
-                DialogHelper.showRetryDialog(requireContext(), "Upload Error", "OneDrive upload failed: ${e.localizedMessage}") {
+                DialogHelper.showInfo(
+                    requireContext(),
+                    "Backup Complete",
+                    "Files uploaded to OneDrive."
+                )
+            } catch (e: Exception) {
+                DialogHelper.showRetryDialog(
+                    requireContext(),
+                    "Upload Error",
+                    "OneDrive upload failed: ${e.localizedMessage}"
+                ) {
                     performOneDriveBackup()
                 }
             } finally {
@@ -177,14 +244,14 @@ class BackupFragment : Fragment() {
         }
     }
 
-    private fun showProgress(message : String) {
+    private fun showProgress(message: String) {
         binding.backupAllButton.isEnabled = false
         binding.googleDriveButton.isEnabled = false
         binding.oneDriveButton.isEnabled = false
         binding.title.text = message
     }
 
-    private fun hideProgress(message : String = "Backup") {
+    private fun hideProgress(message: String = "Backup") {
         binding.backupAllButton.isEnabled = true
         binding.googleDriveButton.isEnabled = true
         binding.oneDriveButton.isEnabled = true
@@ -199,7 +266,7 @@ class BackupFragment : Fragment() {
     companion object {
         private const val ARG_ITEMS = "items"
         private const val REQ_GOOGLE_SIGNIN = 4001
-        fun newInstance(items : List<MediaItem>) = BackupFragment().apply {
+        fun newInstance(items: List<MediaItem>) = BackupFragment().apply {
             arguments = Bundle().apply { putSerializable(ARG_ITEMS, ArrayList(items)) }
         }
     }

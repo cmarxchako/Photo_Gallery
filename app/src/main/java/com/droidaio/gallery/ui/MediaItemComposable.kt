@@ -21,12 +21,17 @@ import com.droidaio.gallery.models.MediaItem
  * @param onClick Callback invoked when the item is clicked.
  */
 @Composable
-fun MediaItemComposable(item : MediaItem, onClick : () -> Unit) {
-    Card(modifier = Modifier
-        .padding(4.dp)
-        .aspectRatio(1f)
-        .clickable { onClick() }) {
-        Image(painter = painterResource(id = android.R.drawable.ic_menu_gallery), contentDescription = item.displayName, modifier = Modifier)
+fun MediaItemComposable(item: MediaItem, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .padding(4.dp)
+            .aspectRatio(1f)
+            .clickable { onClick() }) {
+        Image(
+            painter = painterResource(id = android.R.drawable.ic_menu_gallery),
+            contentDescription = item.displayName,
+            modifier = Modifier
+        )
     }
 }
 

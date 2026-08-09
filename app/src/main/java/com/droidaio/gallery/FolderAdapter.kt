@@ -9,28 +9,38 @@ import com.bumptech.glide.Glide
 import com.droidaio.gallery.databinding.ItemFolderBinding
 import com.droidaio.gallery.models.FolderInfo
 
+/**
+ * RecyclerView Adapter for displaying folders in the folder selection screen.
+ * Each item shows a thumbnail (sampleUri) and a selection indicator (simple ImageView toggle).
+ * The adapter manages a list of FolderInfo items and a set of selected folder ids.
+ * It provides methods to submit a new list of folders, get selected folder ids, and toggle selection.
+ * In a production app, you would likely want to add more features such as:
+ * - Displaying folder names and item counts
+ * - Providing better UI/UX for selection (e.g. checkboxes, multi-select mode)
+ * - Handling edge cases (e.g. no folders found, errors loading thumbnails)
+ */
 class FolderAdapter(
-    private val onCheckedChanged : (folderId : String, checked : Boolean) -> Unit,
+    private val onCheckedChanged: (folderId: String, checked: Boolean) -> Unit,
 ) : RecyclerView.Adapter<FolderAdapter.VH>() {
 
     private val items = mutableListOf<FolderInfo>()
     private val selected = mutableSetOf<String>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list : List<FolderInfo>) {
+    fun submitList(list: List<FolderInfo>, saved: Set<String>) {
         items.clear()
         items.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun getSelectedFolderIds() : List<String> = selected.toList()
+    fun getSelectedFolderIds(): List<String> = selected.toList()
 
-    override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : VH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val binding = ItemFolderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
 
-    override fun onBindViewHolder(holder : VH, position : Int) {
+    override fun onBindViewHolder(holder: VH, position: Int) {
         val item = items[position]
         val folderKey = item.bucketId ?: item.id.toString()
         holder.bind(item, selected.contains(folderKey))
@@ -45,10 +55,10 @@ class FolderAdapter(
         }
     }
 
-    override fun getItemCount() : Int = items.size
+    override fun getItemCount(): Int = items.size
 
-    inner class VH(val binding : ItemFolderBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item : FolderInfo, isSelected : Boolean) {
+    class VH(val binding: ItemFolderBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: FolderInfo, isSelected: Boolean) {
             // thumbnail
             Glide.with(binding.root)
                 .load(item.sampleUri)
@@ -86,7 +96,7 @@ class FolderAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun toggleSelection(bucketId : String) {
+    private fun toggleSelection(bucketId: String) {
         if (selected.contains(bucketId)) selected.remove(bucketId) else selected.add(bucketId)
         notifyDataSetChanged()
     }

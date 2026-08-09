@@ -15,11 +15,15 @@ object Destinations {
 }
 
 @Composable
-fun AppNavGraph(navController : NavHostController) {
+fun AppNavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Destinations.GALLERY) {
         composable("gallery") {
             GalleryScreen(
-                onOpenBackup = { navController.navigate(Destinations.BACKUP); navController.navigate(Destinations.HISTORY) },
+                onOpenBackup = {
+                    navController.navigate(Destinations.BACKUP); navController.navigate(
+                    Destinations.HISTORY
+                )
+                },
                 onOpenSettings = { navController.navigate(Destinations.SETTINGS) })
         }
         composable("backup") { BackupScreen() }

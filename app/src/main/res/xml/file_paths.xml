@@ -18,8 +18,8 @@
         path="." />
 
     <!-- Optional: allow sharing data if needed -->
-    <data-path
-        name="data"
-        path="." />
+    <!--<data-path -->
+    <!--    name="data" -->
+    <!--    path="." /> -->
 </paths>
 
