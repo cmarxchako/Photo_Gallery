@@ -1,6 +1,8 @@
 ################################################
 # Android Studio Custom .gitignore
+app/build/
 app/.cxx/
+app/release/
 #app/src/androidTest/
 #app/src/debug/
 #app/src/test/
@@ -36,5 +38,7 @@ misc.xml
 output-metadata.json
 !README.md
 render.experimental.xml
+*.*~
+
 
 

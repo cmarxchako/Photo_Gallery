@@ -15,8 +15,8 @@ android {
         applicationId = "com.droidaio.gallery"
         minSdkVersion rootProject["minSdkVer"]
         targetSdkVersion rootProject["tarSdkVer"]
-        versionCode 10260809
-        versionName "0.1.0.20260809"
+        versionCode 10260810
+        versionName "0.1.0.20260810"
         vectorDrawables { useSupportLibrary = true }
         multiDexEnabled = false
         buildConfigField("int", "TARGET_SDK", "${targetSdk}")
